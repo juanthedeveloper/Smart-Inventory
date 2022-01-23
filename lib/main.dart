@@ -1,4 +1,5 @@
 import 'package:smart_inventory/itemscreen.dart';
+import 'package:smart_inventory/materiallistscreen.dart';
 import 'package:smart_inventory/materialscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -35,6 +36,11 @@ main() async {
   );
 
   db = await database; //this is for initializing db query for inventory display
+  mapI = await db.query('items');
+  mapM = await db.query('materials');
+  addMaptoList();//initialize materialList with mapM names
+  
+
 }
 
 class MyApp extends StatefulWidget {
@@ -66,7 +72,8 @@ class _MyAppState extends State<MyApp> {
                 child: ElevatedButton(
                   child: Text("Inventory"),
                   onPressed: () async {
-                    mapI = await db.query('items'); //update count
+                    mapI = await db.query('items');
+                    addMaptoList(); //update count
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -94,7 +101,9 @@ class _MyAppState extends State<MyApp> {
                   ),
                   //same as the .elementAt etc
                   onPressed: () async {
-                    mapM = await db.query('materials'); //update count
+                    mapM = await db.query('materials');
+                    
+ //update count
                     Navigator.push(
                         context,
                         MaterialPageRoute(

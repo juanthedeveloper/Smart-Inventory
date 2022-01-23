@@ -23,6 +23,18 @@ Future<void> displayDuplicateDialog(BuildContext context) async {
   );
 }
 
+addMaptoList() async {
+
+materialList.clear();//needed so that the list isent being added infinite items every update/call
+
+//adds the mapM list from db and adds it to a local materialist to display dropdown menu options
+for(int index=0;index<mapM.length;index++){
+
+materialList.add(mapM[index]['name']);
+}
+
+}
+
 Future<void> _displayTextInputDialog(BuildContext context) async {
   //this brings up an alert dialog to input material
   final _textFieldController = TextEditingController();
@@ -61,9 +73,12 @@ Future<void> _displayTextInputDialog(BuildContext context) async {
           TextButton(
             child: Text('OK'),
             onPressed: () async {
+              //add to db
               var newMaterial = Materials(name: material, quanity: materialKG);
               await insertMaterial(newMaterial);
               mapM = await db.query('materials');
+              //add to map for drop down menu purposes
+              addMaptoList();//update the materialList values
               Navigator.pop(context);
             },
           ),

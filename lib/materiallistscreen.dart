@@ -9,10 +9,11 @@ import 'package:flutter/material.dart';
 
 //displays all the materials only currently
 
-final materialList = <String>[];
+late List<String> materialList =[];
 late String material;
-final Map<String, double> materialMap = {};
+//final Map<String, double> materialMap = {};
 late List<String> keysList = [];
+
 
 Future<void> displayDeleteDialog(
     BuildContext context, String deleteName) async {
@@ -30,6 +31,8 @@ Future<void> displayDeleteDialog(
             child: Text('OK'),
             onPressed: () {
               deleteMaterial(context, deleteName);
+              
+              addMaptoList();
               Navigator.push(
                 context,
                 MaterialPageRoute(

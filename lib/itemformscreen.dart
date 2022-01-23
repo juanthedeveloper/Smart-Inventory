@@ -1,13 +1,15 @@
 import 'package:smart_inventory/databasedetails.dart';
 import 'package:smart_inventory/itemscreen.dart';
+import 'package:smart_inventory/main.dart';
 import 'package:smart_inventory/materiallistscreen.dart';
 import 'package:flutter/material.dart';
-
+import 'package:smart_inventory/materialscreen.dart';
 
 //item input screen
 
-List<Item> itemsList = [];
-late String value;
+//List<Item> itemsList = [];
+
+//late String value;
 
 class ItemForm extends StatefulWidget {
   const ItemForm({Key? key}) : super(key: key);
@@ -39,6 +41,8 @@ class ItemFormState extends State<ItemForm> {
   }
 
   Widget build(BuildContext context) {
+    addMaptoList();//update materialList
+    
     return Scaffold(
       appBar: AppBar(
         title: Text("Item Details"),
@@ -79,7 +83,12 @@ class ItemFormState extends State<ItemForm> {
                 fontSize: 25,
                 color: Colors.black,
               ),
-              items: materialMap.keys.map(buildMenuItem).toList(),
+              items: materialList.map((String items) {
+                return DropdownMenuItem(
+                  value: items,
+                  child: Text(items),
+                );
+              }).toList(),
               onChanged: (value1) {
                 setState(() {
                   this.value1 = value1;
@@ -101,7 +110,12 @@ class ItemFormState extends State<ItemForm> {
                 fontSize: 30,
                 color: Colors.black,
               ),
-              items: materialMap.keys.map(buildMenuItem).toList(),
+              items: materialList.map((String items) {
+                return DropdownMenuItem(
+                  value: items,
+                  child: Text(items),
+                );
+              }).toList(),
               onChanged: (value2) {
                 setState(() {
                   this.value2 = value2;
@@ -132,7 +146,12 @@ class ItemFormState extends State<ItemForm> {
                 fontSize: 30,
                 color: Colors.black,
               ),
-              items: materialMap.keys.map(buildMenuItem).toList(),
+              items: materialList.map((String items) {
+                return DropdownMenuItem(
+                  value: items,
+                  child: Text(items),
+                );
+              }).toList(),
               onChanged: (value3) {
                 setState(() {
                   this.value3 = value3;
@@ -147,9 +166,9 @@ class ItemFormState extends State<ItemForm> {
                 var newItem = Items(
                   name: myControllerName.text,
                   price: double.parse(myControllerPrice.text),
-                  material1: myControllerMaterial1.text,
-                  material2: myControllerMaterial2.text,
-                  material3: myControllerMaterial3.text,
+                  material1: value1,
+                  material2: value2,
+                  material3: value3,
                 );
                 await insertItem(newItem);
                 /* old method of using an item list no db
@@ -190,15 +209,4 @@ class ItemFormState extends State<ItemForm> {
       ),
     );
   }
-
-  DropdownMenuItem<String> buildMenuItem(
-          String
-              item) => //this method just turns my list into a dropdown menu list item
-      DropdownMenuItem<String>(
-        value: item,
-        child: Text(
-          item,
-          style: TextStyle(),
-        ),
-      );
 }
