@@ -1,4 +1,4 @@
-#Sun Jan 23 03:42:59 EST 2022
+#Sun Jan 23 16:06:41 EST 2022
 base.0=C\:\\Users\\juan_\\Documents\\SoftwarePrograms\\SmartInventory\\smart_inventory\\Smart-Inventory\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
 renamed.0=classes.dex
 path.0=classes.dex
