@@ -1,5 +1,6 @@
 
 
+import 'package:smart_inventory/databasedetails.dart';
 import 'package:smart_inventory/main.dart';
 import 'package:smart_inventory/materialscreen.dart';
 import 'package:flutter/material.dart';
@@ -28,8 +29,7 @@ Future<void> displayDeleteDialog(
           TextButton(
             child: Text('OK'),
             onPressed: () {
-              materialMap.removeWhere((key, value) => key == deleteName);
-              //materialList.remove(materialList[indexDeleteM]);
+              deleteMaterial(context, deleteName);
               Navigator.push(
                 context,
                 MaterialPageRoute(

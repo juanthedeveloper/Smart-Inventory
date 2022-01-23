@@ -63,6 +63,7 @@ Future<void> _displayTextInputDialog(BuildContext context) async {
             onPressed: () async {
               var newMaterial = Materials(name: material, quanity: materialKG);
               await insertMaterial(newMaterial);
+              mapM = await db.query('materials');
               Navigator.pop(context);
             },
           ),
