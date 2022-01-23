@@ -6,3 +6,7 @@
 .dart_tool/package_config_subset
 .dart_tool/package_config.json
 .packages
+.flutter-plugins-dependencies
+.flutter-plugins
+.dart_tool/package_config_subset
+.dart_tool/package_config.json
