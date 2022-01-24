@@ -39,6 +39,9 @@ class ItemFormState extends State<ItemForm> {
   final myControllerMaterial1 = TextEditingController();
   final myControllerMaterial2 = TextEditingController();
   final myControllerMaterial3 = TextEditingController();
+  final myControllerm1Use = TextEditingController();
+  final myControllerm2Use = TextEditingController();
+  final myControllerm3Use = TextEditingController();
   String? value1;
   String? value2;
   String? value3;
@@ -51,6 +54,9 @@ class ItemFormState extends State<ItemForm> {
     myControllerMaterial1.dispose();
     myControllerMaterial2.dispose();
     myControllerMaterial3.dispose();
+    myControllerm1Use.dispose();
+    myControllerm2Use.dispose();
+    myControllerm3Use.dispose();
     super.dispose();
   }
 
@@ -58,14 +64,14 @@ class ItemFormState extends State<ItemForm> {
     addMaptoList(); //update materialList
     materialList.add("None"); //adding a blank option
 
-   const enterMatStyle = TextStyle(
-                  fontSize: 20,
-                  color: Colors.black,
-                );
-    const enterMatHint =Text("Select material");
-
+    const enterMatStyle = TextStyle(
+      fontSize: 20,
+      color: Colors.black,
+    );
+    const enterMatHint = Text("Select material");
 
     return Scaffold(
+      backgroundColor: Colors.grey[300],
       appBar: AppBar(
         centerTitle: true,
         title: Text("Item Details"),
@@ -88,13 +94,14 @@ class ItemFormState extends State<ItemForm> {
             height: 50,
             child: TextField(
                 controller: myControllerPrice,
-                decoration:
-                    InputDecoration(hintText: "Enter price, then press enter."),
+                decoration: InputDecoration(
+                  hintText: "Enter price, then press enter.",
+                ),
                 onSubmitted: (String priceInput) {}),
           ),
           Positioned(
             top: 100,
-            left:0,
+            left: 0,
             height: 50,
             width: 250,
             child: DropdownButton<String>(
@@ -112,10 +119,18 @@ class ItemFormState extends State<ItemForm> {
               }).toList(),
               onChanged: (value1) {
                 setState(() {
-                  this.value1 = value1;
+                  this.value1 = value1.toString();
                 });
               },
             ),
+          ),
+          Positioned(
+            top: 94,
+            left: 260,
+            width: 130,
+            child: TextField(
+                controller: myControllerm1Use,
+                decoration: InputDecoration(hintText: "Material use(m)")),
           ),
           Positioned(
             top: 150,
@@ -137,7 +152,7 @@ class ItemFormState extends State<ItemForm> {
                 }).toList(),
                 onChanged: (value2) {
                   setState(() {
-                    this.value2 = value2;
+                    this.value2 = value2.toString();
                   });
                 }),
           ),
@@ -161,7 +176,7 @@ class ItemFormState extends State<ItemForm> {
               }).toList(),
               onChanged: (value3) {
                 setState(() {
-                  this.value3 = value3;
+                  this.value3 = value3.toString();
                 });
               },
             ),
@@ -173,10 +188,11 @@ class ItemFormState extends State<ItemForm> {
               onPressed: () async {
                 var newItem = Items(
                   name: myControllerName.text,
-                  price: double.parse(myControllerPrice.text),
-                  material1: value1,
-                  material2: value2,
-                  material3: value3,
+                  price: double.tryParse(myControllerPrice.text),
+                  material1: value1.toString(),
+                  material2: value2.toString(),
+                  material3: value3.toString(),
+                  m1Use: double.tryParse(myControllerm1Use.text),
                 );
                 await insertItem(newItem);
                 displaySuccessDialog(context);

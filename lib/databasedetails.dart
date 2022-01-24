@@ -7,19 +7,35 @@ import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
 class Items {
-  String name;
+  String name="";
   double? price;
   String? material1;
   String? material2;
   String? material3;
+  double? m1Use=0;
+  double? m2Use=0;
+  double? m3Use=0;
 
-  Items({
-    required this.name,
-    required this.price,
-    this.material1,
-    this.material2,
-    this.material3,
-  });
+
+  Items(
+      {String name = "null",
+      double? price = 0,
+      String? material1 = "None",
+      String? material2 = "None",
+      String? material3 = "None",
+      double? m1Use=0,
+      double? m2Use=0,
+      double? m3Use=0
+      }) {
+    this.name = name;
+    this.price = price;
+    this.material1 = material1;
+    this.material2 = material2;
+    this.material3 = material3;
+    this.m1Use=m1Use;
+    this.m2Use=m2Use;
+    this.m3Use=m3Use;
+  }
 
   Map<String, dynamic> toMapI() {
     return {
@@ -28,6 +44,9 @@ class Items {
       'material1': material1,
       'material2': material2,
       'material3': material3,
+      'm1Use': m1Use,
+      'm2Use': m2Use,
+      'm3Use': m3Use
     };
   }
 
