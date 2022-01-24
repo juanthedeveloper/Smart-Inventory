@@ -1,15 +1,29 @@
 import 'package:smart_inventory/databasedetails.dart';
 import 'package:smart_inventory/itemscreen.dart';
-import 'package:smart_inventory/main.dart';
 import 'package:smart_inventory/materiallistscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_inventory/materialscreen.dart';
 
-//item input screen
-
-//List<Item> itemsList = [];
-
-//late String value;
+displaySuccessDialog(BuildContext context) {
+  return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Added Item'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ItemScreen()));
+              },
+            ),
+          ],
+        );
+      });
+}
 
 class ItemForm extends StatefulWidget {
   const ItemForm({Key? key}) : super(key: key);
@@ -41,8 +55,8 @@ class ItemFormState extends State<ItemForm> {
   }
 
   Widget build(BuildContext context) {
-    addMaptoList();//update materialList
-    
+    addMaptoList(); //update materialList
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Item Details"),
@@ -93,7 +107,6 @@ class ItemFormState extends State<ItemForm> {
                 setState(() {
                   this.value1 = value1;
                 });
-                //itemsList[itemsList.length - 1].setMaterial1(value1.toString());
               },
             ),
           ),
@@ -162,6 +175,7 @@ class ItemFormState extends State<ItemForm> {
           Positioned(
             top: 300,
             child: ElevatedButton(
+              child: Text("Submit"),
               onPressed: () async {
                 var newItem = Items(
                   name: myControllerName.text,
@@ -171,38 +185,8 @@ class ItemFormState extends State<ItemForm> {
                   material3: value3,
                 );
                 await insertItem(newItem);
-                /* old method of using an item list no db
-                if (itemsList.isEmpty) {
-                  itemsList.add(Item(label: myControllerName.text));
-                  itemsList[itemsList.length - 1]
-                      .setPrice(double.parse(myControllerPrice.text));
-                  itemsList[itemsList.length - 1]
-                      .setMaterial1(myControllerMaterial1.toString());
-                  itemsList[itemsList.length - 1]
-                      .setMaterial2(myControllerMaterial2.toString());
-                  itemsList[itemsList.length - 1]
-                      .setMaterial3(myControllerMaterial3.toString());
-                } else {//to check for duplicates
-                  for (int i = 0; i < itemsList.length; i++) {
-                    if (itemsList[i].getLabel == myControllerName.text) {
-                      print("duplicated");
-                    } else {
-                      print("added");
-                      itemsList.add(Item(label: myControllerName.text));
-                      itemsList[itemsList.length - 1]
-                          .setPrice(double.parse(myControllerPrice.text));
-                      itemsList[itemsList.length - 1]
-                          .setMaterial1(myControllerMaterial1.toString());
-                      itemsList[itemsList.length - 1]
-                          .setMaterial2(myControllerMaterial2.toString());
-                      itemsList[itemsList.length - 1]
-                          .setMaterial3(myControllerMaterial3.toString());
-                    }
-                  }
-                }
-              },*/
+                displaySuccessDialog(context);
               },
-              child: Text("Submit"),
             ),
           ),
         ],
