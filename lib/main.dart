@@ -28,7 +28,7 @@ main() async {
 // When the database is first created, create a table to store items.
     onCreate: (db, version) {
       // Run the CREATE TABLE statement on the database.
-      db.execute('CREATE TABLE items(name TEXT PRIMARY KEY, price REAL, material1 TEXT, material2 TEXT, material3 TEXT)',);
+      db.execute('CREATE TABLE items(name TEXT PRIMARY KEY, price REAL, material1 TEXT, material2 TEXT, material3 TEXT, m1Use REAL, m2Use REAL, m3Use REAL)',);
       db.execute('CREATE TABLE materials(name TEXT PRIMARY KEY, quanity REAL)');
     },
     
@@ -60,9 +60,9 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         //the entire screen becomes this widget with custom settings
-        appBar: AppBar(
+        appBar: AppBar( centerTitle: true,
             //the tittle header
-            title: Text("Smart Inventory")),
+            title: Text("Smart Inventory",)),
         body: Center(
           child: Column(
             children: [

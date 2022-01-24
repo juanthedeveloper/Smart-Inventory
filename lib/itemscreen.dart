@@ -54,7 +54,7 @@ class ItemScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: AppBar(centerTitle: true,
         //the leading: is only so that when you press the back arrow it goes to the itemscreen if not it will
         //go back to the dialog menu from when you hit delete
         //this really needs to be fixed with an update UI on the dialog method but it will work for now

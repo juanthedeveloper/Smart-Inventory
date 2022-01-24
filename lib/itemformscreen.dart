@@ -56,9 +56,18 @@ class ItemFormState extends State<ItemForm> {
 
   Widget build(BuildContext context) {
     addMaptoList(); //update materialList
+    materialList.add("None"); //adding a blank option
+
+   const enterMatStyle = TextStyle(
+                  fontSize: 20,
+                  color: Colors.black,
+                );
+    const enterMatHint =Text("Select material");
+
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text("Item Details"),
       ),
       body: Stack(
@@ -84,19 +93,17 @@ class ItemFormState extends State<ItemForm> {
                 onSubmitted: (String priceInput) {}),
           ),
           Positioned(
-            top: 110,
-            left: 220,
+            top: 100,
+            left:0,
             height: 50,
-            width: 180,
+            width: 250,
             child: DropdownButton<String>(
               //Material 1
               //this allows materials to be selcted from the list
+              hint: enterMatHint,
               isExpanded: true,
               value: value1,
-              style: TextStyle(
-                fontSize: 25,
-                color: Colors.black,
-              ),
+              style: enterMatStyle,
               items: materialList.map((String items) {
                 return DropdownMenuItem(
                   value: items,
@@ -112,53 +119,40 @@ class ItemFormState extends State<ItemForm> {
           ),
           Positioned(
             top: 150,
-            left: 300,
-            height: 50,
-            width: 200,
-            child: DropdownButton<String>(
-              //Material 2
-              //this allows materials to be selcted from the list
-              value: value2,
-              style: TextStyle(
-                fontSize: 30,
-                color: Colors.black,
-              ),
-              items: materialList.map((String items) {
-                return DropdownMenuItem(
-                  value: items,
-                  child: Text(items),
-                );
-              }).toList(),
-              onChanged: (value2) {
-                setState(() {
-                  this.value2 = value2;
-                });
-              },
-            ),
-          ),
-          Positioned(
-            top: 110,
             left: 0,
-            height: 40,
-            width: 200,
-            child: ElevatedButton(
-              child: Text("Enter material 1:", style: TextStyle(fontSize: 20)),
-              onPressed: () {},
-            ),
+            height: 50,
+            width: 250,
+            child: DropdownButton<String>(
+                //Material 2
+                //this allows materials to be selcted from the list
+                hint: enterMatHint,
+                isExpanded: true,
+                value: value2,
+                style: enterMatStyle,
+                items: materialList.map((String items) {
+                  return DropdownMenuItem(
+                    value: items,
+                    child: Text(items),
+                  );
+                }).toList(),
+                onChanged: (value2) {
+                  setState(() {
+                    this.value2 = value2;
+                  });
+                }),
           ),
           Positioned(
             top: 200,
-            left: 300,
+            left: 0,
             height: 50,
-            width: 200,
+            width: 250,
             child: DropdownButton<String>(
               //Material 3
               //this allows materials to be selcted from the list
+              hint: enterMatHint,
+              isExpanded: true,
               value: value3,
-              style: TextStyle(
-                fontSize: 30,
-                color: Colors.black,
-              ),
+              style: enterMatStyle,
               items: materialList.map((String items) {
                 return DropdownMenuItem(
                   value: items,
