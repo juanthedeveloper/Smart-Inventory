@@ -1,6 +1,6 @@
 import 'package:smart_inventory/itemscreen.dart';
-import 'package:smart_inventory/materiallistscreen.dart';
 import 'package:smart_inventory/materialscreen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -62,7 +62,7 @@ class _MyAppState extends State<MyApp> {
         //the entire screen becomes this widget with custom settings
         appBar: AppBar(
             //the tittle header
-            title: Text("SmartInventory")),
+            title: Text("Smart Inventory")),
         body: Center(
           child: Column(
             children: [
