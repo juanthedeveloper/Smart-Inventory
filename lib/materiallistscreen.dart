@@ -1,25 +1,18 @@
-
+import 'dart:async';
 
 import 'package:smart_inventory/databasedetails.dart';
 import 'package:smart_inventory/main.dart';
 import 'package:smart_inventory/materialscreen.dart';
 import 'package:flutter/material.dart';
 
-
-
-//displays all the materials only currently
-
-late List<String> materialList =[];
+//displays all the materials and quanity
+late List<String> materialList = [];
 late String material;
-//final Map<String, double> materialMap = {};
 late List<String> keysList = [];
-
 
 Future<void> displayDeleteDialog(
     BuildContext context, String deleteName) async {
   //this brings up an alert dialog to input material
-
-  //deleteName = deleteName;
 
   return showDialog(
     context: context,
@@ -31,15 +24,7 @@ Future<void> displayDeleteDialog(
             child: Text('OK'),
             onPressed: () {
               deleteMaterial(context, deleteName);
-              
               addMaptoList();
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      const MaterialListScreen(), //navigates to the material screen, it really should just reload ui but this is a bandaid
-                ),
-              );
             },
           ),
           TextButton(
@@ -67,6 +52,13 @@ class MaterialListScreen extends StatefulWidget {
 }
 
 class MaterialListScreenState extends State<MaterialListScreen> {
+
+  @override
+  void setState(VoidCallback fn) {
+    // TODO: implement setState
+    super.setState(fn);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,10 +79,11 @@ class MaterialListScreenState extends State<MaterialListScreen> {
       ),
       body: ListView(
         children: [
-          for (int index=0; index<mapM.length;index++)
+          for (int index = 0; index < mapM.length; index++)
             Stack(
               children: [
-                Container( width: 250,
+                Container(
+                  width: 250,
                   child: ElevatedButton(
                     child: Text(mapM[index]['name']),
                     onPressed: () {},
@@ -99,13 +92,13 @@ class MaterialListScreenState extends State<MaterialListScreen> {
                     },
                   ),
                 ),
-                Positioned( width:150,  left: 260,
+                Positioned(
+                  width: 150,
+                  left: 260,
                   child: ElevatedButton(
                     child: Text("KG: " + mapM[index]['quanity'].toString()),
                     onPressed: () {},
-                    onLongPress: () {
-                      
-                    },
+                    onLongPress: () {},
                   ),
                 ),
               ],

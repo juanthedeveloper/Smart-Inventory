@@ -18,13 +18,6 @@ Future<void> displayDeleteDialog(BuildContext context, String name) async {
             child: Text('OK'),
             onPressed: () {
               deleteItem(context, name);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      InventoryScreen(), //navigates to the material screen, it really should just reload ui but this is a bandaid
-                ),
-              );
             },
           ),
           TextButton(
@@ -39,10 +32,21 @@ Future<void> displayDeleteDialog(BuildContext context, String name) async {
   );
 }
 
-class InventoryScreen extends StatelessWidget {
+class InventoryScreen extends StatefulWidget {
   InventoryScreen({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<InventoryScreen> createState() => _InventoryScreenState();
+}
+
+class _InventoryScreenState extends State<InventoryScreen> {
+
+  //allows the state to be updated when a value is changed
+  void setState(VoidCallback fn) {
+    super.setState(fn);
+  }
 
   @override
   Widget build(BuildContext context) {
