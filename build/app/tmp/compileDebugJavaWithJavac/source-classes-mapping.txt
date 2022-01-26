@@ -1,4 +1,0 @@
-io/flutter/plugins/GeneratedPluginRegistrant.java
- io.flutter.plugins.GeneratedPluginRegistrant
-com/example/smart_inventory/BuildConfig.java
- com.example.smart_inventory.BuildConfig
