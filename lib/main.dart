@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'inventoryscreen.dart';
-
+ 
 
 late final db;
 late final database;
