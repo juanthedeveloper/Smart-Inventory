@@ -42,9 +42,12 @@ class ItemFormState extends State<ItemForm> {
   final myControllerm1Use = TextEditingController();
   final myControllerm2Use = TextEditingController();
   final myControllerm3Use = TextEditingController();
-  String? value1;
-  String? value2;
-  String? value3;
+  String value1 = "None";
+  String value2= "None";
+  String value3= "None";
+  double m1use=0;
+  double m2use=0;
+  double m3use=0;
 
   @override
   void dispose() {
@@ -119,7 +122,7 @@ class ItemFormState extends State<ItemForm> {
               }).toList(),
               onChanged: (value1) {
                 setState(() {
-                  this.value1 = value1;
+                  this.value1 = value1.toString();
                 });
               },
             ),
@@ -130,7 +133,9 @@ class ItemFormState extends State<ItemForm> {
             width: 130,
             child: TextField(
                 controller: myControllerm1Use,
-                decoration: InputDecoration(hintText: "Material use(m)")),
+                decoration: InputDecoration(hintText: "Material use(m)"),
+                onEditingComplete:(){ m1use=double.parse(myControllerm1Use.text);} 
+                ),
           ),
           Positioned(
             top: 150,
@@ -155,6 +160,15 @@ class ItemFormState extends State<ItemForm> {
                     this.value2 = value2.toString();
                   });
                 }),
+          ),Positioned(
+            top: 144,
+            left: 260,
+            width: 130,
+            child: TextField(
+                controller: myControllerm2Use,
+                decoration: InputDecoration(hintText: "Material use(m)"),
+                onEditingComplete:(){ m2use=double.parse(myControllerm2Use.text);} 
+                ),
           ),
           Positioned(
             top: 200,
@@ -182,6 +196,16 @@ class ItemFormState extends State<ItemForm> {
             ),
           ),
           Positioned(
+            top: 194,
+            left: 260,
+            width: 130,
+            child: TextField(
+                controller: myControllerm3Use,
+                decoration: InputDecoration(hintText: "Material use(m)"),
+                onEditingComplete:(){ m3use=double.parse(myControllerm3Use.text);} 
+                ),
+          ),
+          Positioned(
             top: 300,
             child: ElevatedButton(
               child: Text("Submit"),
@@ -192,7 +216,9 @@ class ItemFormState extends State<ItemForm> {
                   material1: value1.toString(),
                   material2: value2.toString(),
                   material3: value3.toString(),
-                  m1Use: double.tryParse(myControllerm1Use.text),
+                  m1Use: m1use,
+                  m2Use: m2use,
+                  m3Use: m3use,
                 );
                 await insertItem(newItem);
                 displaySuccessDialog(context);
