@@ -18,7 +18,7 @@ const divider = Divider(height: 20,thickness: 10,color: Colors.black,);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(mapI[i]['name'].toUpperCase() + " details"),
+        title: Text(mapI[i]['name'] + " details"),
       ),
       body: ListView(
         children: [
