@@ -6,7 +6,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'inventoryscreen.dart';
  
-
+//test
 late final db;
 late final database;
 late List<Map<String, dynamic>> mapI;
