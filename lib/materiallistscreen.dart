@@ -25,6 +25,7 @@ Future<void> displayDeleteDialog(
             onPressed: () {
               deleteMaterial(context, deleteName);
               addMaptoList();
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(deleteName+ " removed."),));
             },
           ),
           TextButton(

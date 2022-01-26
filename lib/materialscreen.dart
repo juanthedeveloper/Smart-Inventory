@@ -24,15 +24,13 @@ Future<void> displayDuplicateDialog(BuildContext context) async {
 }
 
 addMaptoList() async {
-
-materialList.clear();//needed so that the list isent being added infinite items every update/call
+  materialList
+      .clear(); //needed so that the list isent being added infinite items every update/call
 
 //adds the mapM list from db and adds it to a local materialist to display dropdown menu options
-for(int index=0;index<mapM.length;index++){
-
-materialList.add(mapM[index]['name']);
-}
-
+  for (int index = 0; index < mapM.length; index++) {
+    materialList.add(mapM[index]['name']);
+  }
 }
 
 Future<void> _displayTextInputDialog(BuildContext context) async {
@@ -74,12 +72,16 @@ Future<void> _displayTextInputDialog(BuildContext context) async {
             child: Text('OK'),
             onPressed: () async {
               //add to db
-              var newMaterial = Materials(name: material.toUpperCase(), quanity: materialKG);
+              var newMaterial =
+                  Materials(name: material.toUpperCase(), quanity: materialKG);
               await insertMaterial(newMaterial);
               mapM = await db.query('materials');
               //add to map for drop down menu purposes
-              addMaptoList();//update the materialList values
+              addMaptoList(); //update the materialList values
               Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(material + " added."),
+              ));
             },
           ),
           TextButton(
@@ -99,7 +101,8 @@ class MaterialScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(centerTitle: true,
+      appBar: AppBar(
+        centerTitle: true,
         //the leading: is only so that when you press the back arrow it goes to the itemscreen if not it will
         //go back to the dialog menu from when you hit delete
         //this really needs to be fixed with an update UI on the dialog method but it will work for now

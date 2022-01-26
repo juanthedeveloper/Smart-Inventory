@@ -19,6 +19,8 @@ Future<void> displayDeleteDialog(BuildContext context, String name) async {
             child: Text('OK'),
             onPressed: () {
               deleteItem(context, name);
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(name+ " removed."),));
+              //SnackBar(content: Text("Item deleted"),);
             },
           ),
           TextButton(

@@ -119,7 +119,7 @@ class ItemFormState extends State<ItemForm> {
               }).toList(),
               onChanged: (value1) {
                 setState(() {
-                  this.value1 = value1.toString();
+                  this.value1 = value1;
                 });
               },
             ),
