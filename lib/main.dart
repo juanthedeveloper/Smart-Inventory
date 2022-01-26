@@ -102,8 +102,6 @@ class _MyAppState extends State<MyApp> {
                   //same as the .elementAt etc
                   onPressed: () async {
                     mapM = await db.query('materials');
-                    
- //update count
                     Navigator.push(
                         context,
                         MaterialPageRoute(

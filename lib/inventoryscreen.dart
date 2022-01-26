@@ -2,6 +2,7 @@ import 'package:smart_inventory/databasedetails.dart';
 import 'package:smart_inventory/itemdetail.dart';
 import 'package:smart_inventory/main.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_inventory/productDetailScreen.dart';
 
 Future<void> displayDeleteDialog(BuildContext context, String name) async {
   //this brings up an alert dialog to input material
@@ -72,7 +73,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ItemDetail(
+                    builder: (context) => ProductDetailScreen(
                       i: index,
                     ),
                   ),
