@@ -21,14 +21,28 @@ class ProductDetailScreen extends StatelessWidget {
         child: ListTile(
           title: Text("\$" + mapI[i]['price'].toString()),
           leading: Image.asset('assets/icons/moneyIco.png'),
+          
         ),
       ),
       Card(
         child: ListTile(
-          title: Text(mapI[i]['material1']),
+          title: Text(mapI[i]['material1'].toString()),
+          leading: Image.asset('assets/icons/filamentRoll.png'),
+          subtitle: Text(mapI[i]['m1Use'].toString()+"mm") ,
+        ),
+      ),
+      Card(
+        child: ListTile(
+          title: Text(mapI[i]['material2'].toString()),
           leading: Image.asset('assets/icons/filamentRoll.png'),
         ),
-      )
+      ),
+      Card(
+        child: ListTile(
+          title: Text(mapI[i]['material3'].toString()),
+          leading: Image.asset('assets/icons/filamentRoll.png'),
+        ),
+      ),
     ]));
   }
 }
