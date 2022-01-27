@@ -7,23 +7,33 @@ import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
 class Items {
-  String name="";
-  double? price;
-  String? material1;
-  String? material2;
-  String? material3;
-  double? m1Use=0;
-  double? m2Use=0;
-  double? m3Use=0;
-
+  String name = "";
+  double price;
+  String material1;
+  String material2;
+  String material3;
+  double m1Use = 0;
+  double m2Use = 0;
+  double m3Use = 0;
 
   Items(
+      {this.name = 'null',
+      this.price = 0,
+      this.material1 = 'None',
+      this.material2 = 'None',
+      this.material3 = 'None',
+      this.m1Use = 0,
+      this.m2Use = 0,
+      this.m3Use = 0});
+
+  /* Items(
+  
       {String name = "null",
       double? price = 0,
       String? material1 = "None",
       String? material2 = "None",
       String? material3 = "None",
-      double? m1Use=0,
+      double m1Use=0,
       double? m2Use=0,
       double? m3Use=0
       }) {
@@ -36,7 +46,7 @@ class Items {
     this.m2Use=m2Use;
     this.m3Use=m3Use;
   }
-
+*/
   Map<String, dynamic> toMapI() {
     return {
       'name': name,
@@ -83,16 +93,10 @@ class Materials {
   String name;
   double? quanity;
 
-  Materials({
-    required this.name,
-    this.quanity
-  });
+  Materials({required this.name, this.quanity});
 
   Map<String, dynamic> toMapM() {
-    return {
-      'name': name,
-      'quanity':quanity
-    };
+    return {'name': name, 'quanity': quanity};
   }
 
   @override

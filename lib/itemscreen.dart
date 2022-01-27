@@ -22,7 +22,7 @@ class ItemScreen extends StatelessWidget {
             ),
           ),
         ),
-        title: Text("Items"),
+        title: Text("Products"),
       ),
       body: Center(
         child: Column(

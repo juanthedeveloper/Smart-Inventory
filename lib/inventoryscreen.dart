@@ -1,5 +1,6 @@
 import 'package:smart_inventory/databasedetails.dart';
 import 'package:smart_inventory/itemdetail.dart';
+import 'package:smart_inventory/itemformscreen.dart';
 import 'package:smart_inventory/main.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_inventory/productDetailScreen.dart';
@@ -19,7 +20,9 @@ Future<void> displayDeleteDialog(BuildContext context, String name) async {
             child: Text('OK'),
             onPressed: () {
               deleteItem(context, name);
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(name+ " removed."),));
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(name + " removed."),
+              ));
               //SnackBar(content: Text("Item deleted"),);
             },
           ),
@@ -45,7 +48,6 @@ class InventoryScreen extends StatefulWidget {
 }
 
 class _InventoryScreenState extends State<InventoryScreen> {
-
   //allows the state to be updated when a value is changed
   void setState(VoidCallback fn) {
     super.setState(fn);
@@ -54,7 +56,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(centerTitle: true,
+      appBar: AppBar(
+        centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.push(
@@ -64,7 +67,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
             ),
           ),
         ),
-        title: Text("InventoryScreen"),
+        title: Text("Products"),
       ),
       body: ListView(
         children: [
@@ -86,6 +89,20 @@ class _InventoryScreenState extends State<InventoryScreen> {
               },
             ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: IconButton(
+          onPressed: () {
+           Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ItemForm(),
+                    ),
+                  );
+          },
+          icon: Image.asset('assets/icons/addBasketIco.png'),
+        ),
       ),
     );
   }

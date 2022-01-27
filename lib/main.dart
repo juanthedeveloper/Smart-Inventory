@@ -70,7 +70,7 @@ class _MyAppState extends State<MyApp> {
               SizedBox(
                 width: 110,
                 child: ElevatedButton(
-                  child: Text("Inventory"),
+                  child: Text("Products"),
                   onPressed: () async {
                     mapI = await db.query('items');
                     addMaptoList(); //update count
@@ -81,10 +81,10 @@ class _MyAppState extends State<MyApp> {
                   },
                 ),
               ),
-              SizedBox(
+             /* SizedBox(
                 width: 110,
                 child: ElevatedButton(
-                  child: Text("Items"),
+                  child: Text("Products"),
                   onPressed: () {
                     Navigator.push(
                         context,
@@ -92,12 +92,12 @@ class _MyAppState extends State<MyApp> {
                             builder: (context) => const ItemScreen()));
                   },
                 ),
-              ),
+              ),  */
               SizedBox(
                 width: 110,
                 child: ElevatedButton(
                   child: Text(
-                    "Material",
+                    "Materials",
                   ),
                   //same as the .elementAt etc
                   onPressed: () async {

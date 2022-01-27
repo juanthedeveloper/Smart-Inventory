@@ -45,10 +45,6 @@ class ItemFormState extends State<ItemForm> {
   String value1 = "None";
   String value2= "None";
   String value3= "None";
-  double m1use=0;
-  double m2use=0;
-  double m3use=0;
-
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -134,7 +130,7 @@ class ItemFormState extends State<ItemForm> {
             child: TextField(
                 controller: myControllerm1Use,
                 decoration: InputDecoration(hintText: "Material use(m)"),
-                onEditingComplete:(){ m1use=double.parse(myControllerm1Use.text);} 
+                
                 ),
           ),
           Positioned(
@@ -167,7 +163,6 @@ class ItemFormState extends State<ItemForm> {
             child: TextField(
                 controller: myControllerm2Use,
                 decoration: InputDecoration(hintText: "Material use(m)"),
-                onEditingComplete:(){ m2use=double.parse(myControllerm2Use.text);} 
                 ),
           ),
           Positioned(
@@ -202,7 +197,6 @@ class ItemFormState extends State<ItemForm> {
             child: TextField(
                 controller: myControllerm3Use,
                 decoration: InputDecoration(hintText: "Material use(m)"),
-                onEditingComplete:(){ m3use=double.parse(myControllerm3Use.text);} 
                 ),
           ),
           Positioned(
@@ -210,9 +204,28 @@ class ItemFormState extends State<ItemForm> {
             child: ElevatedButton(
               child: Text("Submit"),
               onPressed: () async {
+                double m1use;
+                double m2use;
+                double m3use;
+                if (myControllerm1Use.text=="") {
+                  m1use=0;
+                }
+                else{m1use=double.parse(myControllerm1Use.text);}
+
+                if (myControllerm2Use.text=="") {
+                  m2use=0;
+                }
+                else{m2use=double.parse(myControllerm2Use.text);}
+
+                if (myControllerm3Use.text=="") {
+                  m3use=0;
+                }
+                else{m3use=double.parse(myControllerm3Use.text);}
+
+
                 var newItem = Items(
                   name: myControllerName.text,
-                  price: double.tryParse(myControllerPrice.text),
+                  price: double.parse(myControllerPrice.text),
                   material1: value1.toString(),
                   material2: value2.toString(),
                   material3: value3.toString(),
