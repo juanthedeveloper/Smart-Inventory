@@ -3,3 +3,12 @@ www.flaticon.com%2Ffree-icons%2Fmoney%22+title%3D%22money+icons%22%3EMoney+icons
 
 filamentRoll
 <a href="https://www.flaticon.com/free-icons/filament" title="filament icons">Filament icons created by Freepik - Flaticon</a>
+
+toolbox
+<a href="https://www.flaticon.com/free-icons/tool-box" title="tool box icons">Tool box icons created by pongsakornRed - Flaticon</a>
+
+basket
+<a href="https://www.flaticon.com/free-icons/add-product" title="add product icons">Add product icons created by Smashicons - Flaticon</a>
+
+main icon
+<a href="https://www.flaticon.com/free-icons/3d" title="3d icons">3d icons created by Freepik - Flaticon</a>

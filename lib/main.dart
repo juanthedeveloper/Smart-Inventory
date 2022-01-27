@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'inventoryscreen.dart';
- 
 
 late final db;
 late final database;
@@ -28,19 +27,19 @@ main() async {
 // When the database is first created, create a table to store items.
     onCreate: (db, version) {
       // Run the CREATE TABLE statement on the database.
-      db.execute('CREATE TABLE items(name TEXT PRIMARY KEY, price REAL, material1 TEXT, material2 TEXT, material3 TEXT, m1Use REAL, m2Use REAL, m3Use REAL)',);
+      db.execute(
+        'CREATE TABLE items(name TEXT PRIMARY KEY, price REAL, material1 TEXT, material2 TEXT, material3 TEXT, m1Use REAL, m2Use REAL, m3Use REAL)',
+      );
       db.execute('CREATE TABLE materials(name TEXT PRIMARY KEY, quanity REAL)');
     },
-    
+
     version: 1,
   );
 
   db = await database; //this is for initializing db query for inventory display
   mapI = await db.query('items');
   mapM = await db.query('materials');
-  addMaptoList();//initialize materialList with mapM names
-  
-
+  addMaptoList(); //initialize materialList with mapM names
 }
 
 class MyApp extends StatefulWidget {
@@ -60,13 +59,16 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         //the entire screen becomes this widget with custom settings
-        appBar: AppBar( centerTitle: true,
-            //the tittle header
-            title: Text("Smart Inventory",)),
-        body: Center(
+
+        body: Container(
+          constraints: BoxConstraints.expand(),
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/images/main.png'), fit: BoxFit.cover),
+          ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/images/main.png'),
               SizedBox(
                 width: 110,
                 child: ElevatedButton(
@@ -81,7 +83,7 @@ class _MyAppState extends State<MyApp> {
                   },
                 ),
               ),
-             /* SizedBox(
+              /* SizedBox(
                 width: 110,
                 child: ElevatedButton(
                   child: Text("Products"),
