@@ -1,5 +1,5 @@
 import 'package:smart_inventory/databasedetails.dart';
-import 'package:smart_inventory/screens/inventoryscreen.dart';
+import 'package:smart_inventory/screens/productsscreen.dart';
 import 'package:smart_inventory/screens/materiallistscreen.dart';
 import 'package:flutter/material.dart';
 

@@ -92,6 +92,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         child: IconButton(
+          iconSize: 24,
           onPressed: () {
            Navigator.push(
                     context,

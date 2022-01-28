@@ -1,11 +1,11 @@
-import 'package:smart_inventory/nolongerused/itemscreenREMOVED.dart';
+import 'package:smart_inventory/screens/productsscreen.dart';
 import 'package:smart_inventory/screens/materiallistscreen.dart';
 
 
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'screens/inventoryscreen.dart';
+import 'screens/productsscreen.dart';
 
 late final db;
 late final database;

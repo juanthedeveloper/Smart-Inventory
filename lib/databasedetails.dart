@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:smart_inventory/inventoryscreen.dart';
+import 'package:smart_inventory/screens/productsscreen.dart';
 import 'package:smart_inventory/main.dart';
-import 'package:smart_inventory/materiallistscreen.dart';
+import 'package:smart_inventory/screens/materiallistscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 

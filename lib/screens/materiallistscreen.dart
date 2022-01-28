@@ -186,14 +186,15 @@ class MaterialListScreenState extends State<MaterialListScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        child: IconButton(
+        child: Ink(decoration: ShapeDecoration(color: Colors.green ,shape: CircleBorder()), child: IconButton(
+          iconSize: 60,
           onPressed: () {
             //_displayTextInputDialog(context);
             displayTextInputDialog(context);
           },
-          icon: Image.asset('assets/icons/addBasketIco.png'),
+          icon: Image.asset('assets/icons/filamentPlusIco.png'),
         ),
       ),
-    );
+    ));
   }
 }
