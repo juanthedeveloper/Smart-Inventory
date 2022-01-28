@@ -1,7 +1,16 @@
 import 'package:smart_inventory/main.dart';
 import 'package:flutter/material.dart';
 
-//shows item details currently
+
+
+
+
+//NO LONGER USED
+//Maintaining for reference purposes
+
+
+
+
 
 class ItemDetail extends StatelessWidget {
   late int i;

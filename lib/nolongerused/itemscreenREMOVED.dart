@@ -1,7 +1,19 @@
 import 'package:smart_inventory/main.dart';
 import 'package:flutter/material.dart';
 
-import 'itemformscreen.dart';
+import '../screens/itemformscreen.dart';
+
+
+
+//NO LONGER USED
+//Maintaining for reference purposes
+
+
+
+
+
+
+
 
 class ItemScreen extends StatelessWidget {
   const ItemScreen({Key? key}) : super(key: key);

@@ -1,8 +1,10 @@
 import 'package:smart_inventory/databasedetails.dart';
-import 'package:smart_inventory/itemscreen.dart';
-import 'package:smart_inventory/materiallistscreen.dart';
+import 'package:smart_inventory/screens/inventoryscreen.dart';
+import 'package:smart_inventory/screens/materiallistscreen.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_inventory/materialscreen.dart';
+
+import '../main.dart';
+
 
 displaySuccessDialog(BuildContext context) {
   return showDialog(
@@ -17,7 +19,7 @@ displaySuccessDialog(BuildContext context) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const ItemScreen()));
+                        builder: (context) => InventoryScreen()));
               },
             ),
           ],
@@ -43,8 +45,8 @@ class ItemFormState extends State<ItemForm> {
   final myControllerm2Use = TextEditingController();
   final myControllerm3Use = TextEditingController();
   String value1 = "None";
-  String value2= "None";
-  String value3= "None";
+  String value2 = "None";
+  String value3 = "None";
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -70,36 +72,34 @@ class ItemFormState extends State<ItemForm> {
     const enterMatHint = Text("Select material");
 
     return Scaffold(
-      backgroundColor: Colors.grey[300],
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text("Item Details"),
-      ),
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           Positioned(
+            top: 80,
             width: 400,
             height: 50,
             child: TextField(
                 controller: myControllerName,
-                decoration:
-                    InputDecoration(hintText: "Enter name, then press enter."),
+                decoration: InputDecoration(
+                    hintText: "Enter name, then press enter.",
+                    border: OutlineInputBorder()),
                 onSubmitted: (String nameInput) {}),
           ),
           Positioned(
-            top: 50,
+            top: 140,
             left: 0,
             width: 400,
             height: 50,
             child: TextField(
                 controller: myControllerPrice,
                 decoration: InputDecoration(
-                  hintText: "Enter price, then press enter.",
-                ),
+                    hintText: "Enter price, then press enter.",
+                    border: OutlineInputBorder()),
                 onSubmitted: (String priceInput) {}),
           ),
           Positioned(
-            top: 100,
+            top: 200,
             left: 0,
             height: 50,
             width: 250,
@@ -124,17 +124,19 @@ class ItemFormState extends State<ItemForm> {
             ),
           ),
           Positioned(
-            top: 94,
+            top: 194,
             left: 260,
-            width: 130,
-            child: TextField(
+            width: 140,
+            child: Card(
+              color: Colors.purple[50],
+              child: TextField(
                 controller: myControllerm1Use,
-                decoration: InputDecoration(hintText: "Material use(m)"),
-                
-                ),
+                decoration: InputDecoration(hintText: "Material use(mm)"),
+              ),
+            ),
           ),
           Positioned(
-            top: 150,
+            top: 250,
             left: 0,
             height: 50,
             width: 250,
@@ -156,17 +158,20 @@ class ItemFormState extends State<ItemForm> {
                     this.value2 = value2.toString();
                   });
                 }),
-          ),Positioned(
-            top: 144,
-            left: 260,
-            width: 130,
-            child: TextField(
-                controller: myControllerm2Use,
-                decoration: InputDecoration(hintText: "Material use(m)"),
-                ),
           ),
           Positioned(
-            top: 200,
+            top: 244,
+            left: 260,
+            width: 140,
+            child: Card(
+              child: TextField(
+                controller: myControllerm2Use,
+                decoration: InputDecoration(hintText: "Material use(mm)"),
+              ),
+            ),
+          ),
+          Positioned(
+            top: 300,
             left: 0,
             height: 50,
             width: 250,
@@ -191,37 +196,42 @@ class ItemFormState extends State<ItemForm> {
             ),
           ),
           Positioned(
-            top: 194,
+            top: 294,
             left: 260,
-            width: 130,
-            child: TextField(
+            width: 140,
+            child: Card(
+              child: TextField(
                 controller: myControllerm3Use,
-                decoration: InputDecoration(hintText: "Material use(m)"),
-                ),
+                decoration: InputDecoration(
+                    hintText: "Material use(mm)"),
+              ),
+            ),
           ),
           Positioned(
-            top: 300,
+            top: 400,
             child: ElevatedButton(
               child: Text("Submit"),
               onPressed: () async {
                 double m1use;
                 double m2use;
                 double m3use;
-                if (myControllerm1Use.text=="") {
-                  m1use=0;
+                if (myControllerm1Use.text == "") {
+                  m1use = 0;
+                } else {
+                  m1use = double.parse(myControllerm1Use.text);
                 }
-                else{m1use=double.parse(myControllerm1Use.text);}
 
-                if (myControllerm2Use.text=="") {
-                  m2use=0;
+                if (myControllerm2Use.text == "") {
+                  m2use = 0;
+                } else {
+                  m2use = double.parse(myControllerm2Use.text);
                 }
-                else{m2use=double.parse(myControllerm2Use.text);}
 
-                if (myControllerm3Use.text=="") {
-                  m3use=0;
+                if (myControllerm3Use.text == "") {
+                  m3use = 0;
+                } else {
+                  m3use = double.parse(myControllerm3Use.text);
                 }
-                else{m3use=double.parse(myControllerm3Use.text);}
-
 
                 var newItem = Items(
                   name: myControllerName.text,
@@ -235,6 +245,8 @@ class ItemFormState extends State<ItemForm> {
                 );
                 await insertItem(newItem);
                 displaySuccessDialog(context);
+                mapI = await db.query('items');//query new db item and go back to last screen
+                addMaptoList(); //update count
               },
             ),
           ),

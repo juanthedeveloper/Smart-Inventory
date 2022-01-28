@@ -1,7 +1,26 @@
 import 'package:smart_inventory/databasedetails.dart';
 import 'package:smart_inventory/main.dart';
-import 'package:smart_inventory/materiallistscreen.dart';
+import 'package:smart_inventory/screens/materiallistscreen.dart';
 import 'package:flutter/material.dart';
+
+
+
+
+
+
+
+//NO LONGER USED
+//Maintaining for reference purposes
+
+
+
+
+
+
+
+
+
+
 
 Future<void> displayDuplicateDialog(BuildContext context) async {
   return showDialog(

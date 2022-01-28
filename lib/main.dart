@@ -1,10 +1,11 @@
-import 'package:smart_inventory/itemscreen.dart';
-import 'package:smart_inventory/materialscreen.dart';
+import 'package:smart_inventory/nolongerused/itemscreenREMOVED.dart';
+import 'package:smart_inventory/screens/materiallistscreen.dart';
+
 
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'inventoryscreen.dart';
+import 'screens/inventoryscreen.dart';
 
 late final db;
 late final database;
@@ -72,7 +73,7 @@ class _MyAppState extends State<MyApp> {
             children: [
               SizedBox(
                 width: 110,
-                child: ElevatedButton(
+                child: ElevatedButton(style: ElevatedButton.styleFrom(primary: Colors.green),
                   child: Text("Products"),
                   onPressed: () async {
                     mapI = await db.query('items');
@@ -108,7 +109,7 @@ class _MyAppState extends State<MyApp> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const MaterialScreen()));
+                            builder: (context) => const MaterialListScreen()));
                   },
                 ),
               )
