@@ -26,27 +26,6 @@ class Items {
       this.m2Use = 0,
       this.m3Use = 0});
 
-  /* Items(
-  
-      {String name = "null",
-      double? price = 0,
-      String? material1 = "None",
-      String? material2 = "None",
-      String? material3 = "None",
-      double m1Use=0,
-      double? m2Use=0,
-      double? m3Use=0
-      }) {
-    this.name = name;
-    this.price = price;
-    this.material1 = material1;
-    this.material2 = material2;
-    this.material3 = material3;
-    this.m1Use=m1Use;
-    this.m2Use=m2Use;
-    this.m3Use=m3Use;
-  }
-*/
   Map<String, dynamic> toMapI() {
     return {
       'name': name,
@@ -101,7 +80,7 @@ class Materials {
 
   @override
   String toString() {
-    return 'Materials{name:$name}';
+    return 'Materials{quanity:$quanity}';
   }
 }
 
@@ -109,9 +88,7 @@ Future<void> insertMaterial(Materials materials) async {
   // Get a reference to the database.
   final db = await database;
 
-  // Insert the Dog into the correct table. You might also specify the
-  // `conflictAlgorithm` to use in case the same dog is inserted twice.
-  //
+  // `conflictAlgorithm` to use in case the same material is inserted twice.\
   // In this case, replace any previous data.
   await db.insert(
     'materials',
@@ -126,4 +103,61 @@ Future<void> deleteMaterial(BuildContext context, String name) async {
   mapM = await db.query('materials');
   Navigator.push(
       context, MaterialPageRoute(builder: (context) => MaterialListScreen()));
+}
+
+ addStock(
+  BuildContext context,
+  double currentQuanity,
+  String name,
+)  {
+  //final db = await database;
+  double newStock;
+  final _textFieldController = TextEditingController();
+  late double materialKG;
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text('Enter amount to add'),
+        content: Row(
+          children: <Widget>[
+            Expanded(
+              child: TextField(
+                onChanged: (String materialQuanity) {
+                  materialKG = double.parse(materialQuanity);
+                },
+                controller: _textFieldController,
+                decoration: InputDecoration(hintText: "KG"),
+              ),
+            ),
+          ],
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: Text('OK'),
+            onPressed: () async {
+              amountToAdd = materialKG;
+              newStock = currentQuanity + amountToAdd;
+              await db.rawUpdate(
+                  'UPDATE materials SET quanity = $newStock WHERE name = "$name" ');
+              mapM = await db.query('materials');//update values
+               //the following is only because setState is not working properly on other screen
+              Navigator.push(
+      context, MaterialPageRoute(builder: (context) => MaterialListScreen()));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("Added $amountToAdd KG to $name"),
+              ));
+              
+            },
+          ),
+          TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.pop(context);
+              })
+        ],
+      );
+    },
+  );
+  
 }

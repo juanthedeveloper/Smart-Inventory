@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 import '../main.dart';
 
-
 displaySuccessDialog(BuildContext context) {
   return showDialog(
       context: context,
@@ -16,10 +15,8 @@ displaySuccessDialog(BuildContext context) {
             TextButton(
               child: Text('OK'),
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => InventoryScreen()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => InventoryScreen()));
               },
             ),
           ],
@@ -202,8 +199,7 @@ class ItemFormState extends State<ItemForm> {
             child: Card(
               child: TextField(
                 controller: myControllerm3Use,
-                decoration: InputDecoration(
-                    hintText: "Material use(mm)"),
+                decoration: InputDecoration(hintText: "Material use(mm)"),
               ),
             ),
           ),
@@ -244,9 +240,14 @@ class ItemFormState extends State<ItemForm> {
                   m3Use: m3use,
                 );
                 await insertItem(newItem);
-                displaySuccessDialog(context);
-                mapI = await db.query('items');//query new db item and go back to last screen
+                mapI = await db.query(
+                    'items'); //query new db item and go back to last screen
                 addMaptoList(); //update count
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(newItem.name + " added"),
+                ));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => InventoryScreen()));
               },
             ),
           ),

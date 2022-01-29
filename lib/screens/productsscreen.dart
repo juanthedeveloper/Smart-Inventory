@@ -7,13 +7,11 @@ import 'package:smart_inventory/screens/productDetailScreen.dart';
 Future<void> displayDeleteDialog(BuildContext context, String name) async {
   //this brings up an alert dialog to input material
 
-  //deleteName = deleteName;
-
   return showDialog(
     context: context,
     builder: (context) {
       return AlertDialog(
-        title: Text('Are you sure you would like to remove the item?'),
+        title: Text('Are you sure you would like to remove $name material?'),
         actions: <Widget>[
           TextButton(
             child: Text('OK'),
@@ -22,7 +20,6 @@ Future<void> displayDeleteDialog(BuildContext context, String name) async {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(name + " removed."),
               ));
-              //SnackBar(content: Text("Item deleted"),);
             },
           ),
           TextButton(
@@ -55,55 +52,53 @@ class _InventoryScreenState extends State<InventoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const MyApp(),
+        backgroundColor: Colors.grey[400],
+        appBar: AppBar(
+          backgroundColor: Colors.grey[600],
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MyApp(),
+              ),
             ),
           ),
+          title: Text("Products"),
         ),
-        title: Text("Products"),
-      ),
-      body: ListView(
-        children: [
-          for (int index = 0; index < mapI.length; index++)
-            ElevatedButton(
-              child: Text(mapI[index]['name']),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProductDetailScreen(
-                      i: index,
-                    ),
-                  ),
-                );
-              },
-              onLongPress: () {
-                displayDeleteDialog(context, mapI[index]['name']);
-              },
-            ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: IconButton(
-          iconSize: 24,
-          onPressed: () {
-           Navigator.push(
+        body: ListView(
+          children: [
+            for (int index = 0; index < mapI.length; index++)
+              ElevatedButton(
+                child: Text(mapI[index]['name']),
+                onPressed: () {
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const ItemForm(),
+                      builder: (context) => ProductDetailScreen(
+                        i: index,
+                      ),
                     ),
                   );
-          },
-          icon: Image.asset('assets/icons/addBasketIco.png'),
+                },
+                onLongPress: () {
+                  displayDeleteDialog(context, mapI[index]['name']);
+                },
+              ),
+          ],
         ),
-      ),
-    );
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          child: Ink(
+            decoration:
+                ShapeDecoration(color: Colors.grey[400], shape: CircleBorder()),
+            child: IconButton(
+              iconSize: 60,
+              onPressed: () {},
+              icon: Image.asset('assets/icons/addBasketIco.png'),
+            ),
+          ),
+        ));
   }
 }

@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:smart_inventory/databasedetails.dart';
 import 'package:smart_inventory/main.dart';
-import 'package:smart_inventory/nolongerused/materialscreenREMOVED.dart';
 import 'package:flutter/material.dart';
 
 //displays all the materials and quanity
 late List<String> materialList = [];
 late String material;
 late List<String> keysList = [];
+late double amountToAdd = 0;
 
 addMaptoList() async {
   materialList
@@ -61,8 +61,9 @@ Future<void> displayTextInputDialog(
             child: Text('OK'),
             onPressed: () async {
               //add to db
-              var newMaterial =
-                  Materials(name: material.toUpperCase(), quanity: materialKG);
+              var newMaterial = Materials(
+                  name: material.toUpperCase().trimRight(),
+                  quanity: materialKG);
               await insertMaterial(newMaterial);
               mapM = await db.query('materials');
               //add to map for drop down menu purposes
@@ -89,6 +90,51 @@ Future<void> displayTextInputDialog(
   );
 }
 
+double displayAmountToAdd(BuildContext context, int index) {
+  final _textFieldController = TextEditingController();
+  late String material;
+  late double materialKG;
+
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text('Enter amount to add'),
+        content: Row(
+          children: <Widget>[
+            Expanded(
+              child: TextField(
+                onChanged: (String materialQuanity) {
+                  materialKG = double.parse(materialQuanity);
+                },
+                controller: _textFieldController,
+                decoration: InputDecoration(hintText: "KG"),
+              ),
+            ),
+          ],
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: Text('OK'),
+            onPressed: () {
+              amountToAdd = materialKG;
+
+              Navigator.pop(context);
+            },
+          ),
+          TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.pop(context);
+              })
+        ],
+      );
+    },
+  );
+
+  return amountToAdd;
+}
+
 Future<void> displayDeleteDialog(
     BuildContext context, String deleteName) async {
   //this brings up an alert dialog to input material
@@ -97,7 +143,7 @@ Future<void> displayDeleteDialog(
     context: context,
     builder: (context) {
       return AlertDialog(
-        title: Text('Are you sure you would like to remove material?'),
+        title: Text('Are you sure you would like to remove $deleteName?'),
         actions: <Widget>[
           TextButton(
             child: Text('OK'),
@@ -136,65 +182,153 @@ class MaterialListScreen extends StatefulWidget {
 class MaterialListScreenState extends State<MaterialListScreen> {
   @override
   void setState(VoidCallback fn) {
-    // TODO: implement setState
     super.setState(fn);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const MyApp(),
+        backgroundColor: Colors.grey[400],
+        appBar: AppBar(
+          backgroundColor: Colors.grey[600],
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MyApp(),
+              ),
             ),
           ),
+          centerTitle: true,
+          title: Text("Material List"),
         ),
-        centerTitle: true,
-        title: Text("Material List"),
-      ),
-      body: ListView(
-        children: [
-          for (int index = 0; index < mapM.length; index++)
-            Stack(
-              children: [
-                Container(
-                  width: 250,
-                  child: ElevatedButton(
-                    child: Text(mapM[index]['name']),
-                    onPressed: () {},
-                    onLongPress: () {
-                      displayDeleteDialog(context, mapM[index]['name']);
-                    },
+        body: ListView(
+          children: [
+            for (int index = 0; index < mapM.length; index++)
+              Stack(
+                children: [
+                  Card(
+                    color: getColor(mapM[index]['name']),
+                    child: Column(
+                      children: [
+                        ListTile(
+                          title: Text(
+                            mapM[index]['name'],
+                            style: TextStyle(
+                              fontSize: 25,
+                            ),
+                          ),
+                          leading: Image.asset('assets/icons/filamentRoll.png'),
+                          subtitle: Text(
+                            "KG: " + mapM[index]['quanity'].toString(),
+                            style: TextStyle(fontSize: 17, color: Colors.black),
+                          ),
+                        ),
+                        Row(
+                          //Add and delete buttons
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: 30,
+                              child: TextButton(
+                                child: Text(
+                                  "Add",
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    addStock(context, mapM[index]['quanity'],
+                                        mapM[index]['name']);
+                                  });
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              height: 30,
+                              child: TextButton(
+                                child: Text(
+                                  "Delete",
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                onPressed: () {
+                                  displayDeleteDialog(
+                                      context, mapM[index]['name']);
+                                },
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Positioned(
-                  width: 150,
-                  left: 260,
-                  child: ElevatedButton(
-                    child: Text("KG: " + mapM[index]['quanity'].toString()),
-                    onPressed: () {},
-                    onLongPress: () {},
-                  ),
-                ),
-              ],
+                ],
+              ),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          child: Ink(
+            decoration:
+                ShapeDecoration(color: Colors.grey[400], shape: CircleBorder()),
+            child: IconButton(
+              iconSize: 60,
+              onPressed: () {
+                //_displayTextInputDialog(context);
+                displayTextInputDialog(context);
+              },
+              icon: Image.asset('assets/icons/filamentPlusIco.png'),
             ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Ink(decoration: ShapeDecoration(color: Colors.green ,shape: CircleBorder()), child: IconButton(
-          iconSize: 60,
-          onPressed: () {
-            //_displayTextInputDialog(context);
-            displayTextInputDialog(context);
-          },
-          icon: Image.asset('assets/icons/filamentPlusIco.png'),
-        ),
-      ),
-    ));
+          ),
+        ));
+  }
+
+  getColor(String colorName) {
+    //based on text
+    if (colorName.contains("WHITE")) {
+      return Colors.white;
+    }
+    if (colorName.contains("GREEN")) {
+      return Colors.green[800];
+    }
+    if (colorName.contains("PURPLE")) {
+      return Colors.purple;
+    }
+    if (colorName.contains("BLUE")) {
+      return Colors.blue;
+    }
+    if (colorName.contains("GREY")) {
+      return Colors.grey;
+    }
+    if (colorName.contains("YELLOW")) {
+      return Colors.yellow;
+    }
+    if (colorName.contains("BROWN")) {
+      return Colors.brown;
+    }
+    if (colorName.contains("ORANGE")) {
+      return Colors.orange;
+    }
+    if (colorName.contains("RED")) {
+      return Colors.red[800];
+    }
+    if (colorName.contains("BLACK")) {
+      return Colors.black54;
+    }
+    if (colorName.contains("PINK")) {
+      return Colors.pink;
+    }
+    if (colorName.contains("WOOD")) {
+      return Colors.brown[300];
+    }
+    if (colorName.contains("TEAL")) {
+      return Colors.teal;
+    }
+    if (colorName.contains("CYAN")) {
+      return Colors.cyan;
+    }
+    if (colorName.contains("INDIGO")) {
+      return Colors.indigo;
+    }
   }
 }
