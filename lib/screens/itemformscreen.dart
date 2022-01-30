@@ -70,80 +70,48 @@ class ItemFormState extends State<ItemForm> {
     const enterMatHint = Text("Select material");
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey[400],
       body: Stack(
         children: [
           Positioned(
-            top: 80,
-            width: 400,
-            height: 50,
-            child: TextField(
-                controller: myControllerName,
-                decoration: InputDecoration(
-                    hintText: "Enter name, then press enter.",
-                    border: OutlineInputBorder()),
-                onSubmitted: (String nameInput) {}),
-          ),
+              top: 80,
+              width: 400,
+              height: 50,
+              child: Card(
+                child: TextField(
+                    controller: myControllerName,
+                    decoration: InputDecoration(
+                        hintText: "Enter name, then press enter.",
+                        border: OutlineInputBorder()),
+                    onSubmitted: (String nameInput) {}),
+              )),
           Positioned(
             top: 140,
             left: 0,
             width: 400,
             height: 50,
-            child: TextField(
-                controller: myControllerPrice,
-                decoration: InputDecoration(
-                    hintText: "Enter price, then press enter.",
-                    border: OutlineInputBorder()),
-                onSubmitted: (String priceInput) {}),
-          ),
-          Positioned(
-            top: 200,
-            left: 0,
-            height: 50,
-            width: 250,
-            child: DropdownButton<String>(
-              //Material 1
-              //this allows materials to be selcted from the list
-              hint: enterMatHint,
-              isExpanded: true,
-              value: value1,
-              style: enterMatStyle,
-              items: materialList.map((String items) {
-                return DropdownMenuItem(
-                  value: items,
-                  child: Text(items),
-                );
-              }).toList(),
-              onChanged: (value1) {
-                setState(() {
-                  this.value1 = value1.toString();
-                });
-              },
-            ),
-          ),
-          Positioned(
-            top: 194,
-            left: 260,
-            width: 140,
             child: Card(
-              color: Colors.purple[50],
               child: TextField(
-                controller: myControllerm1Use,
-                decoration: InputDecoration(hintText: "Material use(mm)"),
-              ),
+                  controller: myControllerPrice,
+                  decoration: InputDecoration(
+                      hintText: "Enter price, then press enter.",
+                      border: OutlineInputBorder()),
+                  onSubmitted: (String priceInput) {}),
             ),
           ),
           Positioned(
-            top: 250,
+            top: 193,
             left: 0,
-            height: 50,
+            height: 58,
             width: 250,
-            child: DropdownButton<String>(
-                //Material 2
+            child: Card(
+              child: DropdownButton<String>(
+                underline: SizedBox(),
+                //Material 1
                 //this allows materials to be selcted from the list
                 hint: enterMatHint,
                 isExpanded: true,
-                value: value2,
+                value: value1,
                 style: enterMatStyle,
                 items: materialList.map((String items) {
                   return DropdownMenuItem(
@@ -151,14 +119,53 @@ class ItemFormState extends State<ItemForm> {
                     child: Text(items),
                   );
                 }).toList(),
-                onChanged: (value2) {
+                onChanged: (value1) {
                   setState(() {
-                    this.value2 = value2.toString();
+                    this.value1 = value1.toString();
                   });
-                }),
+                },
+              ),
+            ),
           ),
           Positioned(
-            top: 244,
+            top: 194,
+            left: 260,
+            width: 140,
+            child: Card(
+              child: TextField(
+                controller: myControllerm1Use,
+                decoration: InputDecoration(hintText: "Material use(mm)"),
+              ),
+            ),
+          ),
+          Positioned(
+            top: 248,
+            left: 0,
+            height: 58,
+            width: 250,
+            child: Card(
+              child: DropdownButton<String>(
+                  //Material 2
+                  underline: SizedBox(),
+                  hint: enterMatHint,
+                  isExpanded: true,
+                  value: value2,
+                  style: enterMatStyle,
+                  items: materialList.map((String items) {
+                    return DropdownMenuItem(
+                      value: items,
+                      child: Text(items),
+                    );
+                  }).toList(),
+                  onChanged: (value2) {
+                    setState(() {
+                      this.value2 = value2.toString();
+                    });
+                  }),
+            ),
+          ),
+          Positioned(
+            top: 249,
             left: 260,
             width: 140,
             child: Card(
@@ -169,32 +176,34 @@ class ItemFormState extends State<ItemForm> {
             ),
           ),
           Positioned(
-            top: 300,
+            top: 302,
             left: 0,
-            height: 50,
+            height: 58,
             width: 250,
-            child: DropdownButton<String>(
-              //Material 3
-              //this allows materials to be selcted from the list
-              hint: enterMatHint,
-              isExpanded: true,
-              value: value3,
-              style: enterMatStyle,
-              items: materialList.map((String items) {
-                return DropdownMenuItem(
-                  value: items,
-                  child: Text(items),
-                );
-              }).toList(),
-              onChanged: (value3) {
-                setState(() {
-                  this.value3 = value3.toString();
-                });
-              },
+            child: Card(
+              child: DropdownButton<String>(
+                //Material 3
+                underline: SizedBox(),
+                hint: enterMatHint,
+                isExpanded: true,
+                value: value3,
+                style: enterMatStyle,
+                items: materialList.map((String items) {
+                  return DropdownMenuItem(
+                    value: items,
+                    child: Text(items),
+                  );
+                }).toList(),
+                onChanged: (value3) {
+                  setState(() {
+                    this.value3 = value3.toString();
+                  });
+                },
+              ),
             ),
           ),
           Positioned(
-            top: 294,
+            top: 303,
             left: 260,
             width: 140,
             child: Card(
@@ -207,7 +216,10 @@ class ItemFormState extends State<ItemForm> {
           Positioned(
             top: 400,
             child: ElevatedButton(
-              child: Text("Submit"),
+              style: ElevatedButton.styleFrom(primary: Colors.grey[600]),
+              child: Text(
+                "Submit",
+              ),
               onPressed: () async {
                 double m1use;
                 double m2use;

@@ -64,8 +64,19 @@ Future<void> deleteItem(BuildContext context, String name) async {
   final db = await database;
   db.delete("items", where: "name = ?", whereArgs: [name]);
   mapI = await db.query('items');
-  Navigator.push(
-      context, MaterialPageRoute(builder: (context) => InventoryScreen()));
+  //Navigator.push(
+    //  context, MaterialPageRoute(builder: (context) => InventoryScreen()));
+}
+
+Future<void> updateItemDouble(BuildContext context, String name, String valueToChange, double updateAmount) async {
+  final db = await database;
+  await db.rawUpdate(
+      'UPDATE items SET $valueToChange = $updateAmount WHERE name = "$name" ');
+  mapI = await db.query('items');
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text("Changed $valueToChange to $updateAmount"),
+  ));
+  
 }
 
 class Materials {

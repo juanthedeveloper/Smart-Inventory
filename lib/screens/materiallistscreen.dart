@@ -5,25 +5,24 @@ import 'package:smart_inventory/main.dart';
 import 'package:flutter/material.dart';
 
 //displays all the materials and quanity
+
 late List<String> materialList = [];
 late String material;
 late List<String> keysList = [];
-//late double amountToAdd = 0;
 
+//adds the mapM list from db and adds it to a local materialist to display dropdown menu options
 addMaptoList() async {
   materialList
       .clear(); //needed so that the list isent being added infinite items every update/call
-
-//adds the mapM list from db and adds it to a local materialist to display dropdown menu options
   for (int index = 0; index < mapM.length; index++) {
     materialList.add(mapM[index]['name']);
   }
 }
 
-Future<void> displayTextInputDialog(
+//this brings up an alert dialog to input material
+Future<void> displayMaterialInput(
   BuildContext context,
 ) async {
-  //this brings up an alert dialog to input material
   final _textFieldController = TextEditingController();
   final _textFieldControllerQuanity = TextEditingController();
   late String material;
@@ -87,6 +86,7 @@ Future<void> displayTextInputDialog(
   );
 }
 
+//this brings up an dialog to take an input to add quanity to stock
 Future<double> displayAmountToAdd(
   BuildContext context,
   int index,
@@ -128,15 +128,12 @@ Future<double> displayAmountToAdd(
       );
     },
   );
-  //return Future.delayed(Duration(seconds: 4),()=>materialKG);
-  //return Future.microtask((i) => materialKG);
   return materialKG;
 }
 
+//to delete a material
 Future<void> displayDeleteDialog(
     BuildContext context, String deleteName) async {
-  //this brings up an alert dialog to input material
-
   return await showDialog(
     context: context,
     builder: (context) {
@@ -146,7 +143,7 @@ Future<void> displayDeleteDialog(
           TextButton(
             child: Text('OK'),
             onPressed: () async {
-             await deleteMaterial(context, deleteName);
+              await deleteMaterial(context, deleteName);
               addMaptoList();
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(deleteName + " removed."),
@@ -189,24 +186,17 @@ class MaterialListScreenState extends State<MaterialListScreen> {
     return Scaffold(
         backgroundColor: Colors.grey[400],
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: Colors.grey[600],
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const MyApp(),
-              ),
-            ),
-          ),
           centerTitle: true,
-          title: Text("Material List"),
+          title: Text("Materials"),
         ),
         body: ListView(children: [
           for (int index = 0; index < mapM.length; index++)
             Stack(children: [
               Card(
-                color: getColor(mapM[index]['name']),
+                color: getColor(mapM[index]
+                    ['name']), //gets the background color based in string data
                 child: Column(
                   children: [
                     ListTile(
@@ -216,7 +206,7 @@ class MaterialListScreenState extends State<MaterialListScreen> {
                           fontSize: 25,
                         ),
                       ),
-                      leading: Image.asset('assets/icons/filamentRoll.png'),
+                      leading: Image.asset("assets/icons/filamentRoll.png"),
                       subtitle: Text(
                         "KG: " + mapM[index]['quanity'].toString(),
                         style: TextStyle(fontSize: 17, color: Colors.black),
@@ -224,7 +214,7 @@ class MaterialListScreenState extends State<MaterialListScreen> {
                     ),
                     Row(
                       //Add and delete buttons
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         SizedBox(
                           height: 30,
@@ -234,12 +224,15 @@ class MaterialListScreenState extends State<MaterialListScreen> {
                               style: TextStyle(color: Colors.black),
                             ),
                             onPressed: () async {
+                              //wait for amount to be return
                               final double amount =
                                   await displayAmountToAdd(context, index);
-
-                              await addStock(context, mapM[index]['quanity'],
-                                  mapM[index]['name'], amount);
-                                  setState(() { });
+                              if (amount != 0) {
+                                //THEN run this and wait for db updates
+                                await addStock(context, mapM[index]['quanity'],
+                                    mapM[index]['name'], amount);
+                                setState(() {});
+                              } //refresh UI
                             },
                           ),
                         ),
@@ -251,8 +244,8 @@ class MaterialListScreenState extends State<MaterialListScreen> {
                               style: TextStyle(color: Colors.black),
                             ),
                             onPressed: () async {
-                              await displayDeleteDialog(context, mapM[index]['name']);
-
+                              await displayDeleteDialog(
+                                  context, mapM[index]['name']);
                               setState(() {});
                             },
                           ),
@@ -265,6 +258,7 @@ class MaterialListScreenState extends State<MaterialListScreen> {
             ])
         ]),
         floatingActionButton: FloatingActionButton(
+          //bottom right button to add materials
           onPressed: () {},
           child: Ink(
             decoration:
@@ -272,10 +266,9 @@ class MaterialListScreenState extends State<MaterialListScreen> {
             child: IconButton(
               iconSize: 60,
               onPressed: () async {
-                //_displayTextInputDialog(context);
-               await  displayTextInputDialog(context);
-               setState(() { });
-               
+                //enter material
+                await displayMaterialInput(context);
+                setState(() {});
               },
               icon: Image.asset('assets/icons/filamentPlusIco.png'),
             ),
@@ -283,7 +276,12 @@ class MaterialListScreenState extends State<MaterialListScreen> {
         ));
   }
 
-  getColor(String colorName) {
+//return a color if string matches a color
+  
+}
+
+
+getColor(String colorName) {
     //based on text
     if (colorName.contains("WHITE")) {
       return Colors.white;
@@ -331,4 +329,3 @@ class MaterialListScreenState extends State<MaterialListScreen> {
       return Colors.indigo;
     }
   }
-}

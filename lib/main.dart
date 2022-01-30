@@ -1,6 +1,7 @@
+import 'dart:io';
+
 import 'package:smart_inventory/screens/productsscreen.dart';
 import 'package:smart_inventory/screens/materiallistscreen.dart';
-
 
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -53,8 +54,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  //_ turns classes into private classes
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -73,7 +72,8 @@ class _MyAppState extends State<MyApp> {
             children: [
               SizedBox(
                 width: 110,
-                child: ElevatedButton(style: ElevatedButton.styleFrom(primary: Colors.green),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(primary: Colors.grey[600]),
                   child: Text("Products"),
                   onPressed: () async {
                     mapI = await db.query('items');
@@ -85,25 +85,13 @@ class _MyAppState extends State<MyApp> {
                   },
                 ),
               ),
-              /* SizedBox(
-                width: 110,
-                child: ElevatedButton(
-                  child: Text("Products"),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const ItemScreen()));
-                  },
-                ),
-              ),  */
               SizedBox(
                 width: 110,
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(primary: Colors.grey[600]),
                   child: Text(
                     "Materials",
                   ),
-                  //same as the .elementAt etc
                   onPressed: () async {
                     mapM = await db.query('materials');
                     Navigator.push(

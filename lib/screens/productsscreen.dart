@@ -7,7 +7,7 @@ import 'package:smart_inventory/screens/productDetailScreen.dart';
 Future<void> displayDeleteDialog(BuildContext context, String name) async {
   //this brings up an alert dialog to input material
 
-  return showDialog(
+  return await showDialog(
     context: context,
     builder: (context) {
       return AlertDialog(
@@ -15,11 +15,12 @@ Future<void> displayDeleteDialog(BuildContext context, String name) async {
         actions: <Widget>[
           TextButton(
             child: Text('OK'),
-            onPressed: () {
-              deleteItem(context, name);
+            onPressed: () async {
+              await deleteItem(context, name);
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(name + " removed."),
               ));
+              Navigator.pop(context);
             },
           ),
           TextButton(
@@ -56,52 +57,74 @@ class _InventoryScreenState extends State<InventoryScreen> {
         appBar: AppBar(
           backgroundColor: Colors.grey[600],
           centerTitle: true,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const MyApp(),
-              ),
-            ),
-          ),
+          automaticallyImplyLeading: false,
           title: Text("Products"),
         ),
         body: ListView(
           children: [
             for (int index = 0; index < mapI.length; index++)
-              ElevatedButton(
-                child: Text(mapI[index]['name']),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ProductDetailScreen(
-                        i: index,
-                      ),
+              Card(
+                child: Column(
+                  children: [
+                    ListTile(
+                      title: Text(mapI[index]['name'],style: TextStyle(
+                          fontSize: 25,
+                        ),),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductDetailScreen(
+                              i: index,
+                            ),
+                          ),
+                        );
+                      },
+                      onLongPress: () async {
+                        await displayDeleteDialog(context, mapI[index]['name']);
+                        setState(() {});
+                      },
                     ),
-                  );
-                },
-                onLongPress: () {
-                  displayDeleteDialog(context, mapI[index]['name']);
-                },
-              ),
+                    Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SizedBox(
+                          height: 30,
+                          child: TextButton(
+                            child: Text("Delete",style: TextStyle(color: Colors.transparent)),
+                            onPressed: () async {
+                              await displayDeleteDialog(
+                                  context, mapI[index]['name']);
+                              setState(() {});
+                            },
+                          ),
+                        ),SizedBox(
+                          height: 30,
+                          child: TextButton(
+                            child: Text("Delete",style: TextStyle(color: Colors.black)),
+                            onPressed: () async {
+                              await displayDeleteDialog(
+                                  context, mapI[index]['name']);
+                              setState(() {});
+                            },
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              )
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            
-          },
+          onPressed: () {},
           child: Ink(
             decoration:
                 ShapeDecoration(color: Colors.grey[400], shape: CircleBorder()),
             child: IconButton(
               iconSize: 100,
               onPressed: () {
-                Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ItemForm()));
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => ItemForm()));
               },
               icon: Image.asset('assets/icons/addBasketIco.png'),
             ),

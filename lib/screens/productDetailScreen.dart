@@ -1,8 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:smart_inventory/databasedetails.dart';
+import 'package:smart_inventory/screens/materiallistscreen.dart';
 
 import '../main.dart';
 
-enum popList { edit, delete }
+Future<double> _displayChangedouble(
+    BuildContext context, String updateField) async {
+  final _textFieldController = TextEditingController();
+  double newdouble = 0;
+
+  await showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text('Enter new $updateField:'),
+        content: Row(
+          children: <Widget>[
+            Expanded(
+              child: TextField(
+                onChanged: (materialQuanity) {},
+                controller: _textFieldController,
+                decoration: InputDecoration(hintText: "\$"),
+              ),
+            ),
+          ],
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: Text('OK'),
+            onPressed: () {
+              newdouble = double.parse(_textFieldController.text);
+
+              Navigator.pop(context);
+            },
+          ),
+          TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.pop(context);
+                return;
+                Navigator.pop(context);
+              })
+        ],
+      );
+    },
+  );
+  return newdouble;
+}
 
 class ProductDetailScreen extends StatefulWidget {
   late int i;
@@ -18,56 +62,74 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[400],
       body: ListView(
         children: <Widget>[
-          
-          ListTile(
-            title: (Text(mapI[widget.i]['name'].toString(),
-                style: TextStyle(fontSize: 60))),
+          Card(
+            color: Colors.grey[600],
+            child: ListTile(
+              title: (Text(mapI[widget.i]['name'].toString(),
+                  style: TextStyle(fontSize: 50, color: Colors.white))),
+            ),
           ),
           Card(
+            //price
             child: ListTile(
               title: Text("\$" + mapI[widget.i]['price'].toString()),
               leading: Image.asset('assets/icons/moneyIco.png'),
               trailing: IconButton(
                 icon: Image.asset('assets/icons/toolboxIco.png'),
-                onPressed: () {},
+                onPressed: () async {
+                  final double newValue =
+                      await _displayChangedouble(context, 'price');
+                  if (newValue != 0) {
+                    await updateItemDouble(
+                        context, mapI[widget.i]['name'], 'price', newValue);
+                    setState(() {});
+                  }
+                },
               ),
             ),
           ),
-          Card(
-            child: ListTile(
-              title: Text(mapI[widget.i]['material1'].toString()),
-              leading: Image.asset('assets/icons/filamentRoll.png'),
-              subtitle: Text(mapI[widget.i]['m1Use'].toString() + "mm"),
-              trailing: IconButton(
-                icon: Image.asset('assets/icons/toolboxIco.png'),
-                onPressed: () {},
+          if (mapI[widget.i]['material1'].toString() != "None")
+            Card(
+              //MATERIAL1
+              color: getColor(mapI[widget.i]['material1'].toString()),
+              child: ListTile(
+                title: Text(mapI[widget.i]['material1'].toString(),textScaleFactor: 1.5,),
+                leading: Image.asset('assets/icons/filamentRoll.png'),
+                subtitle: Text(mapI[widget.i]['m1Use'].toString() + "mm",textScaleFactor: 1.5,style: TextStyle(color: Colors.black)),
               ),
             ),
-          ),
-          Card(
-            child: ListTile(
-              title: Text(mapI[widget.i]['material2'].toString()),
-              leading: Image.asset('assets/icons/filamentRoll.png'),
-              subtitle: Text(mapI[widget.i]['m2Use'].toString() + "mm"),
-              trailing: IconButton(
-                icon: Image.asset('assets/icons/toolboxIco.png'),
-                onPressed: () {},
+          if (mapI[widget.i]['material2'].toString() != "None")
+            Card(
+              //MATERIAL 2
+              color: getColor(mapI[widget.i]['material2'].toString()),
+              child: ListTile(
+                title: Text(mapI[widget.i]['material2'].toString(),textScaleFactor: 1.5,),
+                leading: Image.asset('assets/icons/filamentRoll.png'),
+                subtitle: Text(mapI[widget.i]['m2Use'].toString() + "mm",textScaleFactor: 1.5,style: TextStyle(color: Colors.black)),
               ),
             ),
-          ),
-          Card(
-            child: ListTile(
-              title: Text(mapI[widget.i]['material3'].toString()),
-              leading: Image.asset('assets/icons/filamentRoll.png'),
-              subtitle: Text(mapI[widget.i]['m3Use'].toString() + "mm"),
-              trailing: IconButton(
-                icon: Image.asset('assets/icons/toolboxIco.png'),
-                onPressed: () {},
+          if (mapI[widget.i]['material3'].toString() != "None")
+            Card(
+              //MATERIAL 3
+              color: getColor(mapI[widget.i]['material3'].toString()),
+              child: ListTile(
+                title: Text(mapI[widget.i]['material3'].toString(),textScaleFactor: 1.5,),
+                leading: Image.asset('assets/icons/filamentRoll.png'),
+                subtitle: Text(mapI[widget.i]['m3Use'].toString() + "mm",textScaleFactor: 1.5,style: TextStyle(color: Colors.black)),
               ),
             ),
-          ),
+          if (mapI[widget.i]['material3'].toString() == "None" &&
+              mapI[widget.i]['material2'].toString() == "None" &&
+              mapI[widget.i]['material1'].toString() == "None")
+            Card(
+              child: Text(
+                "No materials. Delete item and add again with correct materials.",
+                style: TextStyle(fontSize: 40),
+              ),
+            )
         ],
       ),
     );
