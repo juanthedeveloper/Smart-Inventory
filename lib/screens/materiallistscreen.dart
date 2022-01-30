@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 late List<String> materialList = [];
 late String material;
 late List<String> keysList = [];
-late double amountToAdd = 0;
+//late double amountToAdd = 0;
 
 addMaptoList() async {
   materialList
@@ -28,7 +28,7 @@ Future<void> displayTextInputDialog(
   final _textFieldControllerQuanity = TextEditingController();
   late String material;
   late double materialKG;
-  return showDialog(
+  return await showDialog(
     context: context,
     builder: (context) {
       return AlertDialog(
@@ -68,10 +68,7 @@ Future<void> displayTextInputDialog(
               mapM = await db.query('materials');
               //add to map for drop down menu purposes
               addMaptoList(); //update the materialList values
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const MaterialListScreen()));
+              Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(material + " added."),
@@ -90,12 +87,14 @@ Future<void> displayTextInputDialog(
   );
 }
 
-double displayAmountToAdd(BuildContext context, int index) {
+Future<double> displayAmountToAdd(
+  BuildContext context,
+  int index,
+) async {
   final _textFieldController = TextEditingController();
-  late String material;
-  late double materialKG;
+  double materialKG = 0;
 
-  showDialog(
+  await showDialog(
     context: context,
     builder: (context) {
       return AlertDialog(
@@ -104,9 +103,7 @@ double displayAmountToAdd(BuildContext context, int index) {
           children: <Widget>[
             Expanded(
               child: TextField(
-                onChanged: (String materialQuanity) {
-                  materialKG = double.parse(materialQuanity);
-                },
+                onChanged: (materialQuanity) {},
                 controller: _textFieldController,
                 decoration: InputDecoration(hintText: "KG"),
               ),
@@ -117,7 +114,7 @@ double displayAmountToAdd(BuildContext context, int index) {
           TextButton(
             child: Text('OK'),
             onPressed: () {
-              amountToAdd = materialKG;
+              materialKG = double.parse(_textFieldController.text);
 
               Navigator.pop(context);
             },
@@ -131,15 +128,16 @@ double displayAmountToAdd(BuildContext context, int index) {
       );
     },
   );
-
-  return amountToAdd;
+  //return Future.delayed(Duration(seconds: 4),()=>materialKG);
+  //return Future.microtask((i) => materialKG);
+  return materialKG;
 }
 
 Future<void> displayDeleteDialog(
     BuildContext context, String deleteName) async {
   //this brings up an alert dialog to input material
 
-  return showDialog(
+  return await showDialog(
     context: context,
     builder: (context) {
       return AlertDialog(
@@ -147,12 +145,13 @@ Future<void> displayDeleteDialog(
         actions: <Widget>[
           TextButton(
             child: Text('OK'),
-            onPressed: () {
-              deleteMaterial(context, deleteName);
+            onPressed: () async {
+             await deleteMaterial(context, deleteName);
               addMaptoList();
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(deleteName + " removed."),
               ));
+              Navigator.pop(context);
             },
           ),
           TextButton(
@@ -203,69 +202,68 @@ class MaterialListScreenState extends State<MaterialListScreen> {
           centerTitle: true,
           title: Text("Material List"),
         ),
-        body: ListView(
-          children: [
-            for (int index = 0; index < mapM.length; index++)
-              Stack(
-                children: [
-                  Card(
-                    color: getColor(mapM[index]['name']),
-                    child: Column(
+        body: ListView(children: [
+          for (int index = 0; index < mapM.length; index++)
+            Stack(children: [
+              Card(
+                color: getColor(mapM[index]['name']),
+                child: Column(
+                  children: [
+                    ListTile(
+                      title: Text(
+                        mapM[index]['name'],
+                        style: TextStyle(
+                          fontSize: 25,
+                        ),
+                      ),
+                      leading: Image.asset('assets/icons/filamentRoll.png'),
+                      subtitle: Text(
+                        "KG: " + mapM[index]['quanity'].toString(),
+                        style: TextStyle(fontSize: 17, color: Colors.black),
+                      ),
+                    ),
+                    Row(
+                      //Add and delete buttons
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ListTile(
-                          title: Text(
-                            mapM[index]['name'],
-                            style: TextStyle(
-                              fontSize: 25,
+                        SizedBox(
+                          height: 30,
+                          child: TextButton(
+                            child: Text(
+                              "Add",
+                              style: TextStyle(color: Colors.black),
                             ),
-                          ),
-                          leading: Image.asset('assets/icons/filamentRoll.png'),
-                          subtitle: Text(
-                            "KG: " + mapM[index]['quanity'].toString(),
-                            style: TextStyle(fontSize: 17, color: Colors.black),
+                            onPressed: () async {
+                              final double amount =
+                                  await displayAmountToAdd(context, index);
+
+                              await addStock(context, mapM[index]['quanity'],
+                                  mapM[index]['name'], amount);
+                                  setState(() { });
+                            },
                           ),
                         ),
-                        Row(
-                          //Add and delete buttons
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 30,
-                              child: TextButton(
-                                child: Text(
-                                  "Add",
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    addStock(context, mapM[index]['quanity'],
-                                        mapM[index]['name']);
-                                  });
-                                },
-                              ),
+                        SizedBox(
+                          height: 30,
+                          child: TextButton(
+                            child: Text(
+                              "Delete",
+                              style: TextStyle(color: Colors.black),
                             ),
-                            SizedBox(
-                              height: 30,
-                              child: TextButton(
-                                child: Text(
-                                  "Delete",
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                                onPressed: () {
-                                  displayDeleteDialog(
-                                      context, mapM[index]['name']);
-                                },
-                              ),
-                            )
-                          ],
+                            onPressed: () async {
+                              await displayDeleteDialog(context, mapM[index]['name']);
+
+                              setState(() {});
+                            },
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                ],
-              ),
-          ],
-        ),
+                  ],
+                ),
+              )
+            ])
+        ]),
         floatingActionButton: FloatingActionButton(
           onPressed: () {},
           child: Ink(
@@ -273,9 +271,11 @@ class MaterialListScreenState extends State<MaterialListScreen> {
                 ShapeDecoration(color: Colors.grey[400], shape: CircleBorder()),
             child: IconButton(
               iconSize: 60,
-              onPressed: () {
+              onPressed: () async {
                 //_displayTextInputDialog(context);
-                displayTextInputDialog(context);
+               await  displayTextInputDialog(context);
+               setState(() { });
+               
               },
               icon: Image.asset('assets/icons/filamentPlusIco.png'),
             ),

@@ -58,6 +58,7 @@ class ItemFormState extends State<ItemForm> {
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     addMaptoList(); //update materialList
     materialList.add("None"); //adding a blank option
@@ -246,7 +247,7 @@ class ItemFormState extends State<ItemForm> {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text(newItem.name + " added"),
                 ));
-                Navigator.push(context,
+                Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) => InventoryScreen()));
               },
             ),

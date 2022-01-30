@@ -95,69 +95,30 @@ Future<void> insertMaterial(Materials materials) async {
     materials.toMapM(),
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
+  mapM = await db.query('materials');
 }
 
 Future<void> deleteMaterial(BuildContext context, String name) async {
   final db = await database;
   db.delete("materials", where: "name = ?", whereArgs: [name]);
   mapM = await db.query('materials');
-  Navigator.push(
-      context, MaterialPageRoute(builder: (context) => MaterialListScreen()));
+  //Navigator.push(
+  //  context, MaterialPageRoute(builder: (context) => MaterialListScreen()));
 }
 
- addStock(
-  BuildContext context,
-  double currentQuanity,
-  String name,
-)  {
+Future<void> addStock(BuildContext context, double currentQuanity, String name,
+    double amountToAdd) async {
   //final db = await database;
   double newStock;
-  final _textFieldController = TextEditingController();
+
   late double materialKG;
-  showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: Text('Enter amount to add'),
-        content: Row(
-          children: <Widget>[
-            Expanded(
-              child: TextField(
-                onChanged: (String materialQuanity) {
-                  materialKG = double.parse(materialQuanity);
-                },
-                controller: _textFieldController,
-                decoration: InputDecoration(hintText: "KG"),
-              ),
-            ),
-          ],
-        ),
-        actions: <Widget>[
-          TextButton(
-            child: Text('OK'),
-            onPressed: () async {
-              amountToAdd = materialKG;
-              newStock = currentQuanity + amountToAdd;
-              await db.rawUpdate(
-                  'UPDATE materials SET quanity = $newStock WHERE name = "$name" ');
-              mapM = await db.query('materials');//update values
-               //the following is only because setState is not working properly on other screen
-              Navigator.push(
-      context, MaterialPageRoute(builder: (context) => MaterialListScreen()));
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text("Added $amountToAdd KG to $name"),
-              ));
-              
-            },
-          ),
-          TextButton(
-              child: Text("Cancel"),
-              onPressed: () {
-                Navigator.pop(context);
-              })
-        ],
-      );
-    },
-  );
-  
+  newStock = currentQuanity + amountToAdd;
+  await db.rawUpdate(
+      'UPDATE materials SET quanity = $newStock WHERE name = "$name" ');
+  mapM = await db.query('materials'); //update values
+  //the following is only because setState is not working properly on other screen
+
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text("Added $amountToAdd KG to $name"),
+  ));
 }

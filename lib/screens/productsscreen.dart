@@ -89,13 +89,20 @@ class _InventoryScreenState extends State<InventoryScreen> {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            
+          },
           child: Ink(
             decoration:
                 ShapeDecoration(color: Colors.grey[400], shape: CircleBorder()),
             child: IconButton(
-              iconSize: 60,
-              onPressed: () {},
+              iconSize: 100,
+              onPressed: () {
+                Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ItemForm()));
+              },
               icon: Image.asset('assets/icons/addBasketIco.png'),
             ),
           ),
