@@ -1,5 +1,12 @@
 name: smart_inventory
-description: A new Flutter project.
+description: 'An ongoing Android and iOS application 
+to help 3D printing businesses keep track of their inventory. 
+Makers will be able to add their materials as well as create 
+items they currently sell made from their materials. Each product
+has a material length requirement and will be used to calculate 
+when inventory is low. This will take out a usually stressful and 
+resource intense process for new and experienced sellers. Currently 
+uses Sqflite for permanent device storage.'
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -35,9 +42,9 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  sqflite: any
-  path: any
-  http:
+  sqflite: ^2.0.2
+  path: ^1.8.0
+  http: ^0.13.4
   
 
 dev_dependencies:
