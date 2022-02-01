@@ -1,5 +1,6 @@
 import 'dart:io';
 
+
 import 'package:smart_inventory/screens/productsscreen.dart';
 import 'package:smart_inventory/screens/materiallistscreen.dart';
 
@@ -30,9 +31,9 @@ main() async {
     onCreate: (db, version) {
       // Run the CREATE TABLE statement on the database.
       db.execute(
-        'CREATE TABLE items(name TEXT PRIMARY KEY, price REAL, material1 TEXT, material2 TEXT, material3 TEXT, m1Use REAL, m2Use REAL, m3Use REAL)',
+        'CREATE TABLE items(name TEXT PRIMARY KEY, price REAL, material1 TEXT, material2 TEXT, material3 TEXT, m1Use REAL, m2Use REAL, m3Use REAL, id TEXT)',
       );
-      db.execute('CREATE TABLE materials(name TEXT PRIMARY KEY, quanity REAL)');
+      db.execute('CREATE TABLE materials(name TEXT PRIMARY KEY, quanity REAL, id TEXT)');
     },
 
     version: 1,
@@ -100,7 +101,7 @@ class _MyAppState extends State<MyApp> {
                             builder: (context) => const MaterialListScreen()));
                   },
                 ),
-              )
+              ),
             ],
           ),
         ),

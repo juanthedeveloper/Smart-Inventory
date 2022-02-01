@@ -5,6 +5,7 @@ import 'package:smart_inventory/main.dart';
 import 'package:flutter/material.dart';
 
 //displays all the materials and quanity
+//TODO remove all positioned widgets with rows and columns
 
 late List<String> materialList = [];
 late String material;

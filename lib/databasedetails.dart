@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import 'package:smart_inventory/screens/productsscreen.dart';
 import 'package:smart_inventory/main.dart';
@@ -15,16 +17,19 @@ class Items {
   double m1Use = 0;
   double m2Use = 0;
   double m3Use = 0;
+  String id = "Empty";
 
-  Items(
-      {this.name = 'null',
-      this.price = 0,
-      this.material1 = 'None',
-      this.material2 = 'None',
-      this.material3 = 'None',
-      this.m1Use = 0,
-      this.m2Use = 0,
-      this.m3Use = 0});
+  Items({
+    this.name = 'null',
+    this.price = 0,
+    this.material1 = 'None',
+    this.material2 = 'None',
+    this.material3 = 'None',
+    this.m1Use = 0,
+    this.m2Use = 0,
+    this.m3Use = 0,
+    this.id = "Empty",
+  });
 
   Map<String, dynamic> toMapI() {
     return {
@@ -35,7 +40,8 @@ class Items {
       'material3': material3,
       'm1Use': m1Use,
       'm2Use': m2Use,
-      'm3Use': m3Use
+      'm3Use': m3Use,
+      'id': id
     };
   }
 
@@ -46,18 +52,31 @@ class Items {
 }
 
 Future<void> insertItem(Items item) async {
-  // Get a reference to the database.
-  final db = await database;
-
-  // Insert the Dog into the correct table. You might also specify the
-  // `conflictAlgorithm` to use in case the same dog is inserted twice.
-  //
-  // In this case, replace any previous data.
-  await db.insert(
-    'items',
-    item.toMapI(),
-    conflictAlgorithm: ConflictAlgorithm.replace,
-  );
+  final url =
+      Uri.https('flutterapitest-default-rtdb.firebaseio.com', '/products.json');
+  return http
+      .post(url,
+          body: json.encode({
+            'name': item.name,
+            'price': item.price,
+            'material1': item.material1,
+            'material2': item.material2,
+            'material3': item.material3,
+            'm1Use': item.m1Use,
+            'm2Use': item.m2Use,
+            'm3Use': item.m3Use,
+          }))
+      .then((response) async {
+    item.id =  json.decode(response.body)['name'];
+    //after loading to server is complete, add to local DB
+    final db = await database;
+  await db.insert('items', item.toMapI(),
+  conflictAlgorithm: ConflictAlgorithm.replace);
+  }).catchError((error){
+    print(error);
+    throw error;
+  });
+  
 }
 
 Future<void> deleteItem(BuildContext context, String name) async {
@@ -65,10 +84,11 @@ Future<void> deleteItem(BuildContext context, String name) async {
   db.delete("items", where: "name = ?", whereArgs: [name]);
   mapI = await db.query('items');
   //Navigator.push(
-    //  context, MaterialPageRoute(builder: (context) => InventoryScreen()));
+  //  context, MaterialPageRoute(builder: (context) => InventoryScreen()));
 }
 
-Future<void> updateItemDouble(BuildContext context, String name, String valueToChange, double updateAmount) async {
+Future<void> updateItemDouble(BuildContext context, String name,
+    String valueToChange, double updateAmount) async {
   final db = await database;
   await db.rawUpdate(
       'UPDATE items SET $valueToChange = $updateAmount WHERE name = "$name" ');
@@ -76,17 +96,17 @@ Future<void> updateItemDouble(BuildContext context, String name, String valueToC
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text("Changed $valueToChange to $updateAmount"),
   ));
-  
 }
 
 class Materials {
   String name;
   double? quanity;
+  String? id;
 
-  Materials({required this.name, this.quanity});
+  Materials({required this.name, this.quanity, this.id});
 
   Map<String, dynamic> toMapM() {
-    return {'name': name, 'quanity': quanity};
+    return {'name': name, 'quanity': quanity, 'id': id};
   }
 
   @override

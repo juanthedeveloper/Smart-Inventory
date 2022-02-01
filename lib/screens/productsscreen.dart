@@ -67,9 +67,12 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 child: Column(
                   children: [
                     ListTile(
-                      title: Text(mapI[index]['name'],style: TextStyle(
+                      title: Text(
+                        mapI[index]['name'],
+                        style: TextStyle(
                           fontSize: 25,
-                        ),),
+                        ),
+                      ),
                       onTap: () {
                         Navigator.push(
                           context,
@@ -85,22 +88,15 @@ class _InventoryScreenState extends State<InventoryScreen> {
                         setState(() {});
                       },
                     ),
-                    Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
+                        
                         SizedBox(
                           height: 30,
                           child: TextButton(
-                            child: Text("Delete",style: TextStyle(color: Colors.transparent)),
-                            onPressed: () async {
-                              await displayDeleteDialog(
-                                  context, mapI[index]['name']);
-                              setState(() {});
-                            },
-                          ),
-                        ),SizedBox(
-                          height: 30,
-                          child: TextButton(
-                            child: Text("Delete",style: TextStyle(color: Colors.black)),
+                            child: Text("Delete",
+                                style: TextStyle(color: Colors.black)),
                             onPressed: () async {
                               await displayDeleteDialog(
                                   context, mapI[index]['name']);
@@ -123,6 +119,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
             child: IconButton(
               iconSize: 100,
               onPressed: () {
+                setState(() {});
+
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) => ItemForm()));
               },

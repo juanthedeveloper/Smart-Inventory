@@ -121,6 +121,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 subtitle: Text(mapI[widget.i]['m3Use'].toString() + "mm",textScaleFactor: 1.5,style: TextStyle(color: Colors.black)),
               ),
             ),
+            Card(
+              //MATERIAL 3
+              
+              child: ListTile(
+                title: Text(mapI[widget.i]['id'],textScaleFactor: 1.5,),
+                leading: Image.asset('assets/icons/filamentRoll.png'),
+                
+              ),
+            ),
           if (mapI[widget.i]['material3'].toString() == "None" &&
               mapI[widget.i]['material2'].toString() == "None" &&
               mapI[widget.i]['material1'].toString() == "None")
