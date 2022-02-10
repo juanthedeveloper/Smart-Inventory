@@ -74,11 +74,15 @@ Future<void> displayMaterialInput(
                   content: Text(material + " added."),
                 ),
               );
+              _textFieldController.dispose();
+              _textFieldControllerQuanity.dispose();
             },
           ),
           TextButton(
               child: Text("Cancel"),
               onPressed: () {
+                _textFieldController.dispose();
+                _textFieldControllerQuanity.dispose();
                 Navigator.pop(context);
               })
         ],
@@ -116,13 +120,14 @@ Future<double> displayAmountToAdd(
             child: Text('OK'),
             onPressed: () {
               materialKG = double.parse(_textFieldController.text);
-
+              _textFieldController.dispose();
               Navigator.pop(context);
             },
           ),
           TextButton(
               child: Text("Cancel"),
               onPressed: () {
+                _textFieldController.dispose();
                 Navigator.pop(context);
               })
         ],
@@ -278,55 +283,54 @@ class MaterialListScreenState extends State<MaterialListScreen> {
   }
 
 //return a color if string matches a color
-  
+
 }
 
-
 getColor(String colorName) {
-    //based on text
-    if (colorName.contains("WHITE")) {
-      return Colors.white;
-    }
-    if (colorName.contains("GREEN")) {
-      return Colors.green[800];
-    }
-    if (colorName.contains("PURPLE")) {
-      return Colors.purple;
-    }
-    if (colorName.contains("BLUE")) {
-      return Colors.blue;
-    }
-    if (colorName.contains("GREY")) {
-      return Colors.grey;
-    }
-    if (colorName.contains("YELLOW")) {
-      return Colors.yellow;
-    }
-    if (colorName.contains("BROWN")) {
-      return Colors.brown;
-    }
-    if (colorName.contains("ORANGE")) {
-      return Colors.orange;
-    }
-    if (colorName.contains("RED")) {
-      return Colors.red[800];
-    }
-    if (colorName.contains("BLACK")) {
-      return Colors.black54;
-    }
-    if (colorName.contains("PINK")) {
-      return Colors.pink;
-    }
-    if (colorName.contains("WOOD")) {
-      return Colors.brown[300];
-    }
-    if (colorName.contains("TEAL")) {
-      return Colors.teal;
-    }
-    if (colorName.contains("CYAN")) {
-      return Colors.cyan;
-    }
-    if (colorName.contains("INDIGO")) {
-      return Colors.indigo;
-    }
+  //based on text
+  if (colorName.contains("WHITE")) {
+    return Colors.white;
   }
+  if (colorName.contains("GREEN")) {
+    return Colors.green[800];
+  }
+  if (colorName.contains("PURPLE")) {
+    return Colors.purple;
+  }
+  if (colorName.contains("BLUE")) {
+    return Colors.blue;
+  }
+  if (colorName.contains("GREY")) {
+    return Colors.grey;
+  }
+  if (colorName.contains("YELLOW")) {
+    return Colors.yellow;
+  }
+  if (colorName.contains("BROWN")) {
+    return Colors.brown;
+  }
+  if (colorName.contains("ORANGE")) {
+    return Colors.orange;
+  }
+  if (colorName.contains("RED")) {
+    return Colors.red[800];
+  }
+  if (colorName.contains("BLACK")) {
+    return Colors.black54;
+  }
+  if (colorName.contains("PINK")) {
+    return Colors.pink;
+  }
+  if (colorName.contains("WOOD")) {
+    return Colors.brown[300];
+  }
+  if (colorName.contains("TEAL")) {
+    return Colors.teal;
+  }
+  if (colorName.contains("CYAN")) {
+    return Colors.cyan;
+  }
+  if (colorName.contains("INDIGO")) {
+    return Colors.indigo;
+  }
+}

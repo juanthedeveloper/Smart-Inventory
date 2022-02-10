@@ -30,16 +30,16 @@ Future<double> _displayChangedouble(
             child: Text('OK'),
             onPressed: () {
               newdouble = double.parse(_textFieldController.text);
-
               Navigator.pop(context);
+              _textFieldController.dispose();
             },
           ),
           TextButton(
               child: Text("Cancel"),
               onPressed: () {
                 Navigator.pop(context);
+                _textFieldController.dispose();
                 return;
-                Navigator.pop(context);
               })
         ],
       );

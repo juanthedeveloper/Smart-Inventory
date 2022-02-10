@@ -80,7 +80,7 @@ Future<void> insertItem(Items item) async {
 
 Future<void> deleteItem(BuildContext context, String name, String id) async {
   final baseUrl =
-      Uri.https('flutterapitest-default-rtdb.firebaseio.comproducts',id);
+      Uri.https('',id);
 
 
 print(id);
