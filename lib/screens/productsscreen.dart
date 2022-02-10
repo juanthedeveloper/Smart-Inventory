@@ -4,7 +4,7 @@ import 'package:smart_inventory/main.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_inventory/screens/productDetailScreen.dart';
 
-Future<void> displayDeleteDialog(BuildContext context, String name) async {
+Future<void> displayDeleteDialog(BuildContext context, String name, String id) async {
   //this brings up an alert dialog to input material
 
   return await showDialog(
@@ -16,7 +16,7 @@ Future<void> displayDeleteDialog(BuildContext context, String name) async {
           TextButton(
             child: Text('OK'),
             onPressed: () async {
-              await deleteItem(context, name);
+              await deleteItem(context, name,id);
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(name + " removed."),
               ));
@@ -84,7 +84,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                         );
                       },
                       onLongPress: () async {
-                        await displayDeleteDialog(context, mapI[index]['name']);
+                        await displayDeleteDialog(context, mapI[index]['name'],mapI[index]['id']);
                         setState(() {});
                       },
                     ),
@@ -99,7 +99,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                                 style: TextStyle(color: Colors.black)),
                             onPressed: () async {
                               await displayDeleteDialog(
-                                  context, mapI[index]['name']);
+                                  context, mapI[index]['name'],mapI[index]['id']);
                               setState(() {});
                             },
                           ),

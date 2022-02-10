@@ -67,19 +67,25 @@ Future<void> insertItem(Items item) async {
             'm3Use': item.m3Use,
           }))
       .then((response) async {
-    item.id =  json.decode(response.body)['name'];
+    item.id = json.decode(response.body)['name'];
     //after loading to server is complete, add to local DB
     final db = await database;
-  await db.insert('items', item.toMapI(),
-  conflictAlgorithm: ConflictAlgorithm.replace);
-  }).catchError((error){
+    await db.insert('items', item.toMapI(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
+  }).catchError((error) {
     print(error);
     throw error;
   });
-  
 }
 
-Future<void> deleteItem(BuildContext context, String name) async {
+Future<void> deleteItem(BuildContext context, String name, String id) async {
+  final baseUrl =
+      Uri.https('flutterapitest-default-rtdb.firebaseio.comproducts',id);
+
+
+print(id);
+  http.delete(baseUrl);
+
   final db = await database;
   db.delete("items", where: "name = ?", whereArgs: [name]);
   mapI = await db.query('items');

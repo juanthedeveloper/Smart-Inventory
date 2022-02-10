@@ -96,9 +96,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               //MATERIAL1
               color: getColor(mapI[widget.i]['material1'].toString()),
               child: ListTile(
-                title: Text(mapI[widget.i]['material1'].toString(),textScaleFactor: 1.5,),
+                title: Text(
+                  mapI[widget.i]['material1'].toString(),
+                  textScaleFactor: 1.5,
+                ),
                 leading: Image.asset('assets/icons/filamentRoll.png'),
-                subtitle: Text(mapI[widget.i]['m1Use'].toString() + "mm",textScaleFactor: 1.5,style: TextStyle(color: Colors.black)),
+                subtitle: Text(mapI[widget.i]['m1Use'].toString() + "mm",
+                    textScaleFactor: 1.5,
+                    style: TextStyle(color: Colors.black)),
               ),
             ),
           if (mapI[widget.i]['material2'].toString() != "None")
@@ -106,9 +111,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               //MATERIAL 2
               color: getColor(mapI[widget.i]['material2'].toString()),
               child: ListTile(
-                title: Text(mapI[widget.i]['material2'].toString(),textScaleFactor: 1.5,),
+                title: Text(
+                  mapI[widget.i]['material2'].toString(),
+                  textScaleFactor: 1.5,
+                ),
                 leading: Image.asset('assets/icons/filamentRoll.png'),
-                subtitle: Text(mapI[widget.i]['m2Use'].toString() + "mm",textScaleFactor: 1.5,style: TextStyle(color: Colors.black)),
+                subtitle: Text(mapI[widget.i]['m2Use'].toString() + "mm",
+                    textScaleFactor: 1.5,
+                    style: TextStyle(color: Colors.black)),
               ),
             ),
           if (mapI[widget.i]['material3'].toString() != "None")
@@ -116,20 +126,26 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               //MATERIAL 3
               color: getColor(mapI[widget.i]['material3'].toString()),
               child: ListTile(
-                title: Text(mapI[widget.i]['material3'].toString(),textScaleFactor: 1.5,),
+                title: Text(
+                  mapI[widget.i]['material3'].toString(),
+                  textScaleFactor: 1.5,
+                ),
                 leading: Image.asset('assets/icons/filamentRoll.png'),
-                subtitle: Text(mapI[widget.i]['m3Use'].toString() + "mm",textScaleFactor: 1.5,style: TextStyle(color: Colors.black)),
+                subtitle: Text(mapI[widget.i]['m3Use'].toString() + "mm",
+                    textScaleFactor: 1.5,
+                    style: TextStyle(color: Colors.black)),
               ),
             ),
-            Card(
-              //MATERIAL 3
-              
-              child: ListTile(
-                title: Text(mapI[widget.i]['id'],textScaleFactor: 1.5,),
-                leading: Image.asset('assets/icons/filamentRoll.png'),
-                
+          /*Card(
+            //firebase ID
+            child: ListTile(
+              title: Text(
+                mapI[widget.i]['id'],
+                textScaleFactor: 1.5,
               ),
+              leading: Image.asset('assets/icons/filamentRoll.png'),
             ),
+          ),*/
           if (mapI[widget.i]['material3'].toString() == "None" &&
               mapI[widget.i]['material2'].toString() == "None" &&
               mapI[widget.i]['material1'].toString() == "None")
