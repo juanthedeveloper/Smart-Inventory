@@ -1,12 +1,15 @@
 import 'dart:async';
+import 'dart:ffi';
 
+import 'package:firebase_database/firebase_database.dart';
 import 'package:smart_inventory/databasedetails.dart';
 import 'package:smart_inventory/main.dart';
 import 'package:flutter/material.dart';
 
 //displays all the materials and quanity
 //TODO remove all positioned widgets with rows and columns
-
+//late String? uid;
+late Map<dynamic, dynamic> map = {};
 late List<String> materialList = [];
 late String material;
 late List<String> keysList = [];
@@ -21,9 +24,7 @@ addMaptoList() async {
 }
 
 //this brings up an alert dialog to input material
-Future<void> displayMaterialInput(
-  BuildContext context,
-) async {
+Future<void> _displayMaterialInput(BuildContext context, var uid) async {
   final _textFieldController = TextEditingController();
   final _textFieldControllerQuanity = TextEditingController();
   late String material;
@@ -64,7 +65,7 @@ Future<void> displayMaterialInput(
               var newMaterial = Materials(
                   name: material.toUpperCase().trimRight(),
                   quanity: materialKG);
-              await insertMaterial(newMaterial);
+              await insertMaterial(newMaterial, uid);
               mapM = await db.query('materials');
               //add to map for drop down menu purposes
               addMaptoList(); //update the materialList values
@@ -74,15 +75,11 @@ Future<void> displayMaterialInput(
                   content: Text(material + " added."),
                 ),
               );
-              _textFieldController.dispose();
-              _textFieldControllerQuanity.dispose();
             },
           ),
           TextButton(
               child: Text("Cancel"),
               onPressed: () {
-                _textFieldController.dispose();
-                _textFieldControllerQuanity.dispose();
                 Navigator.pop(context);
               })
         ],
@@ -120,14 +117,13 @@ Future<double> displayAmountToAdd(
             child: Text('OK'),
             onPressed: () {
               materialKG = double.parse(_textFieldController.text);
-              _textFieldController.dispose();
+
               Navigator.pop(context);
             },
           ),
           TextButton(
               child: Text("Cancel"),
               onPressed: () {
-                _textFieldController.dispose();
                 Navigator.pop(context);
               })
         ],
@@ -170,121 +166,142 @@ Future<void> displayDeleteDialog(
 }
 
 class MaterialListScreen extends StatefulWidget {
-  const MaterialListScreen({
-    Key? key,
-  }) : super(key: key);
+  const MaterialListScreen({Key? key, required this.uid}) : super(key: key);
+  final String? uid;
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return MaterialListScreenState();
   }
 }
 
 class MaterialListScreenState extends State<MaterialListScreen> {
+  late Stream<Map<String, dynamic>> stream;
   @override
   void setState(VoidCallback fn) {
     super.setState(fn);
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.grey[400],
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: Colors.grey[600],
-          centerTitle: true,
-          title: Text("Materials"),
-        ),
-        body: ListView(children: [
-          for (int index = 0; index < mapM.length; index++)
-            Stack(children: [
-              Card(
-                color: getColor(mapM[index]
-                    ['name']), //gets the background color based in string data
-                child: Column(
-                  children: [
-                    ListTile(
-                      title: Text(
-                        mapM[index]['name'],
-                        style: TextStyle(
-                          fontSize: 25,
-                        ),
-                      ),
-                      leading: Image.asset("assets/icons/filamentRoll.png"),
-                      subtitle: Text(
-                        "KG: " + mapM[index]['quanity'].toString(),
-                        style: TextStyle(fontSize: 17, color: Colors.black),
-                      ),
-                    ),
-                    Row(
-                      //Add and delete buttons
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        SizedBox(
-                          height: 30,
-                          child: TextButton(
-                            child: Text(
-                              "Add",
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            onPressed: () async {
-                              //wait for amount to be return
-                              final double amount =
-                                  await displayAmountToAdd(context, index);
-                              if (amount != 0) {
-                                //THEN run this and wait for db updates
-                                await addStock(context, mapM[index]['quanity'],
-                                    mapM[index]['name'], amount);
-                                setState(() {});
-                              } //refresh UI
-                            },
-                          ),
-                        ),
-                        SizedBox(
-                          height: 30,
-                          child: TextButton(
-                            child: Text(
-                              "Delete",
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            onPressed: () async {
-                              await displayDeleteDialog(
-                                  context, mapM[index]['name']);
-                              setState(() {});
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              )
-            ])
-        ]),
-        floatingActionButton: FloatingActionButton(
-          //bottom right button to add materials
-          onPressed: () {},
-          child: Ink(
-            decoration:
-                ShapeDecoration(color: Colors.grey[400], shape: CircleBorder()),
-            child: IconButton(
-              iconSize: 60,
-              onPressed: () async {
-                //enter material
-                await displayMaterialInput(context);
-                setState(() {});
-              },
-              icon: Image.asset('assets/icons/filamentPlusIco.png'),
-            ),
-          ),
-        ));
+  void initState() {
+    super.initState();
+    stream = FirebaseDatabase.instance
+        .ref('Users/${widget.uid}/materials')
+        .onValue
+        .map((event) => event.snapshot.value as Map<String, dynamic>);
+    //super.initState();
   }
 
-//return a color if string matches a color
+  // StreamBuilder streamBuilder = new StreamBuilder(builder: builder);
 
+  @override
+  Widget build(BuildContext context) {
+    setState(() {
+      // materials.onValue;
+      // materials.onValue.listen((DatabaseEvent event) {
+      //   map = event.snapshot.value as Map;
+      // });
+    });
+
+    return Scaffold(
+      backgroundColor: Colors.grey[400],
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.grey[600],
+        centerTitle: true,
+        title: Text("Material List"),
+      ),
+      body: ListView(children: [
+        for (int index = 0; index < map.length; index++)
+          Stack(children: [
+            Card(
+              color: getColor(map.keys
+                  .elementAt(index)
+                  .toString()
+                  .toUpperCase()), //gets the background color based in string data
+              child: Column(
+                children: [
+                  ListTile(
+                    title: Text(map.keys.elementAt(index).toString()),
+                    leading: Image.asset("assets/icons/filamentRoll.png"),
+                    subtitle: Text(
+                      "KG: " + map.values.elementAt(index).toString(),
+                      style: TextStyle(fontSize: 17, color: Colors.black),
+                    ),
+                  ),
+                  Row(
+                    //Add and delete buttons
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      SizedBox(
+                        height: 30,
+                        child: TextButton(
+                          child: Text(
+                            "Add",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          onPressed: () async {
+                            //wait for amount to be return
+                            final double amount =
+                                await displayAmountToAdd(context, index);
+                            if (amount != 0) {
+                              //THEN run this and wait for db updates
+                              FirebaseDatabase.instance
+                                  .ref('Users/${widget.uid}/materials/')
+                                  .update({
+                                map.keys.elementAt(index):
+                                    map.values.elementAt(index) + amount
+                              });
+                              setState(() {});
+                            } //refresh UI
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        height: 30,
+                        child: TextButton(
+                          child: Text(
+                            "Delete",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          onPressed: () async {
+                            FirebaseDatabase.instance
+                                .ref(
+                                    'Users/${widget.uid}/materials/${map.keys.elementAt(index).toString()}')
+                                .remove();
+                            setState(() {});
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            )
+          ])
+      ]),
+      floatingActionButton: FloatingActionButton(
+        //bottom right button to add materials
+        onPressed: () {},
+        child: Ink(
+          decoration:
+              ShapeDecoration(color: Colors.grey[400], shape: CircleBorder()),
+          child: IconButton(
+            iconSize: 60,
+            onPressed: () async {
+              //enter material
+              await _displayMaterialInput(context, widget.uid);
+              setState(() {});
+            },
+            icon: Image.asset('assets/icons/filamentPlusIco.png'),
+          ),
+        ),
+      ),
+    );
+  }
 }
+
+//return a color if string matches a color
 
 getColor(String colorName) {
   //based on text
@@ -333,4 +350,16 @@ getColor(String colorName) {
   if (colorName.contains("INDIGO")) {
     return Colors.indigo;
   }
+}
+
+Future<void> updateValue(var uid) async {
+  DatabaseReference materials =
+      FirebaseDatabase.instance.ref('Users/$uid/materials');
+
+  materials.onValue.listen((DatabaseEvent event) {
+    map = event.snapshot.value as Map;
+    print(map);
+    print(map.keys.elementAt(0).toString());
+    print(map.length);
+  }).asFuture();
 }
