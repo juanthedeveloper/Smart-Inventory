@@ -37,8 +37,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-
+  firebase_auth: ^3.1.4
+  firebase_core: ^1.8.0
+  firebase_database: ^9.0.1
+  flutter_signin_button: ^2.0.0
+  splashscreen:
+    git:
+      url: https://github.com/DPLYR-dev/SplashScreenFlutterPackage.git
+      ref: master
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2

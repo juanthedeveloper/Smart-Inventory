@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:smart_inventory/screens/productsscreen.dart';
 import 'package:smart_inventory/main.dart';
-import 'package:smart_inventory/screens/materiallistscreen.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_inventory/screens/materiallistscreen.dart';
 import 'package:sqflite/sqflite.dart';
 
 class Items {
@@ -121,18 +121,14 @@ class Materials {
   }
 }
 
-Future<void> insertMaterial(Materials materials) async {
+Future<void> insertMaterial(Materials materials, var uid) async {
   // Get a reference to the database.
-  final db = await database;
+   DatabaseReference materialsDb =FirebaseDatabase.instance.ref();
+   materialsDb.child('Users/$uid/materials/').update({materials.name:materials.quanity});
+ // materialsDb.child('Users/$uid/materials/${materials.name}').set('${materials.quanity}');
 
-  // `conflictAlgorithm` to use in case the same material is inserted twice.\
-  // In this case, replace any previous data.
-  await db.insert(
-    'materials',
-    materials.toMapM(),
-    conflictAlgorithm: ConflictAlgorithm.replace,
-  );
-  mapM = await db.query('materials');
+ 
+ 
 }
 
 Future<void> deleteMaterial(BuildContext context, String name) async {

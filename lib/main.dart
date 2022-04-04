@@ -1,12 +1,16 @@
 import 'dart:io';
 
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:smart_inventory/screens/productsscreen.dart';
 import 'package:smart_inventory/screens/materiallistscreen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
+import 'package:smart_inventory/screens/signup.dart';
+import 'package:splashscreen/splashscreen.dart';
 import 'package:sqflite/sqflite.dart';
+import 'screens/home.dart';
 import 'screens/productsscreen.dart';
 
 late final db;
@@ -15,11 +19,13 @@ late List<Map<String, dynamic>> mapI;
 late List<Map<String, dynamic>> mapM;
 
 main() async {
-  runApp(const MaterialApp(
-    home: MyApp(),
-  ));
+  
 
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
+ 
+
 // Open the database and store the reference.
   database = openDatabase(
     // Set the path to the database. Note: Using the `join` function from the
@@ -33,7 +39,8 @@ main() async {
       db.execute(
         'CREATE TABLE items(name TEXT PRIMARY KEY, price REAL, material1 TEXT, material2 TEXT, material3 TEXT, m1Use REAL, m2Use REAL, m3Use REAL, id TEXT)',
       );
-      db.execute('CREATE TABLE materials(name TEXT PRIMARY KEY, quanity REAL, id TEXT)');
+      db.execute(
+          'CREATE TABLE materials(name TEXT PRIMARY KEY, quanity REAL, id TEXT)');
     },
 
     version: 1,
@@ -43,69 +50,33 @@ main() async {
   mapI = await db.query('items');
   mapM = await db.query('materials');
   addMaptoList(); //initialize materialList with mapM names
+runApp(MaterialApp(
+    home: IntroScreen(),
+  ));
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return _MyAppState();
-  }
-}
-
-class _MyAppState extends State<MyApp> {
+class IntroScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        //the entire screen becomes this widget with custom settings
-
-        body: Container(
-          constraints: BoxConstraints.expand(),
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage('assets/images/main.png'), fit: BoxFit.cover),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 110,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(primary: Colors.grey[600]),
-                  child: Text("Products"),
-                  onPressed: () async {
-                    mapI = await db.query('items');
-                    addMaptoList(); //update count
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => InventoryScreen()));
-                  },
-                ),
-              ),
-              SizedBox(
-                width: 110,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(primary: Colors.grey[600]),
-                  child: Text(
-                    "Materials",
-                  ),
-                  onPressed: () async {
-                    mapM = await db.query('materials');
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const MaterialListScreen()));
-                  },
-                ),
-              ),
-            ],
-          ),
+    User? result = FirebaseAuth.instance.currentUser;
+    return  SplashScreen(
+      //navigateAfterFuture: updateValue(result.uid),
+        useLoader: true,
+        loadingTextPadding: EdgeInsets.all(0),
+        loadingText: Text(""),
+        navigateAfterSeconds: result != null ? Home(uid: result.uid) : SignUp(),
+        seconds: 5,
+        title:Text(
+          'Welcome To Smart Inventory!',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
         ),
-      ),
-    );
+        //image: Image.asset('assets/images/dart.png', fit: BoxFit.scaleDown),
+        backgroundColor: Colors.white,
+        styleTextUnderTheLoader: new TextStyle(),
+        photoSize: 100.0,
+        onClick: () => print("flutter"),
+        loaderColor: Colors.red);
   }
 }
+
+

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ffi';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:smart_inventory/databasedetails.dart';
@@ -176,33 +175,23 @@ class MaterialListScreen extends StatefulWidget {
 }
 
 class MaterialListScreenState extends State<MaterialListScreen> {
-  late Stream<Map<String, dynamic>> stream;
-  @override
-  void setState(VoidCallback fn) {
-    super.setState(fn);
-  }
+  //late Stream<Map<String, dynamic>> stream;
+  late DatabaseReference materials;
 
   @override
   void initState() {
+    //print(widget.uid);
     super.initState();
-    stream = FirebaseDatabase.instance
-        .ref('Users/${widget.uid}/materials')
-        .onValue
-        .map((event) => event.snapshot.value as Map<String, dynamic>);
-    //super.initState();
+    materials = FirebaseDatabase.instance.ref('Users/${widget.uid}/materials');
+    materials.onValue.listen((DatabaseEvent event) {
+      map = event.snapshot.value as Map;
+    });
+   
   }
-
-  // StreamBuilder streamBuilder = new StreamBuilder(builder: builder);
 
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      // materials.onValue;
-      // materials.onValue.listen((DatabaseEvent event) {
-      //   map = event.snapshot.value as Map;
-      // });
-    });
-
+    
     return Scaffold(
       backgroundColor: Colors.grey[400],
       appBar: AppBar(
@@ -216,9 +205,9 @@ class MaterialListScreenState extends State<MaterialListScreen> {
           Stack(children: [
             Card(
               color: getColor(map.keys
-                  .elementAt(index)
-                  .toString()
-                  .toUpperCase()), //gets the background color based in string data
+                 .elementAt(index)
+                 .toString()
+                 .toUpperCase()), //gets the background color based in string data
               child: Column(
                 children: [
                   ListTile(
@@ -358,8 +347,6 @@ Future<void> updateValue(var uid) async {
 
   materials.onValue.listen((DatabaseEvent event) {
     map = event.snapshot.value as Map;
-    print(map);
-    print(map.keys.elementAt(0).toString());
-    print(map.length);
-  }).asFuture();
+    
+  });
 }
