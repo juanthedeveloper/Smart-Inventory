@@ -1,9 +1,9 @@
-import 'package:smart_inventory/databasedetails.dart';
+import 'package:smart_inventory/Items.dart';
 import 'package:smart_inventory/screens/productsscreen.dart';
-import 'package:smart_inventory/screens/materiallistscreen.dart';
 import 'package:flutter/material.dart';
 
 import '../main.dart';
+import 'materiallistscreen.dart';
 
 var _isLoading = false;
 
@@ -63,8 +63,8 @@ class ItemFormState extends State<ItemForm> {
 
   @override
   Widget build(BuildContext context) {
-    addMaptoList(); //update materialList
-    materialList.add("None"); //adding a blank option
+    //addMaptoList(); //update materialList
+    //materialList.add("None"); //adding a blank option
 
     const enterMatStyle = TextStyle(
       fontSize: 20,

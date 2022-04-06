@@ -1,11 +1,10 @@
-import 'dart:async';
+
 import 'dart:convert';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:smart_inventory/main.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_inventory/screens/materiallistscreen.dart';
+
 import 'package:sqflite/sqflite.dart';
 
 class Items {
@@ -79,14 +78,12 @@ Future<void> insertItem(Items item) async {
 }
 
 Future<void> deleteItem(BuildContext context, String name, String id) async {
-  final baseUrl =
-      Uri.https('',id);
+  final baseUrl = Uri.https('', id);
 
-
-print(id);
+  print(id);
   http.delete(baseUrl);
 
-  final db = await database;
+ 
   db.delete("items", where: "name = ?", whereArgs: [name]);
   mapI = await db.query('items');
   //Navigator.push(
@@ -95,63 +92,11 @@ print(id);
 
 Future<void> updateItemDouble(BuildContext context, String name,
     String valueToChange, double updateAmount) async {
-  final db = await database;
+ 
   await db.rawUpdate(
       'UPDATE items SET $valueToChange = $updateAmount WHERE name = "$name" ');
   mapI = await db.query('items');
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text("Changed $valueToChange to $updateAmount"),
-  ));
-}
-
-class Materials {
-  String name;
-  double? quanity;
-  String? id;
-
-  Materials({required this.name, this.quanity, this.id});
-
-  Map<String, dynamic> toMapM() {
-    return {'name': name, 'quanity': quanity, 'id': id};
-  }
-
-  @override
-  String toString() {
-    return 'Materials{quanity:$quanity}';
-  }
-}
-
-Future<void> insertMaterial(Materials materials, var uid) async {
-  // Get a reference to the database.
-   DatabaseReference materialsDb =FirebaseDatabase.instance.ref();
-   materialsDb.child('Users/$uid/materials/').update({materials.name:materials.quanity});
- // materialsDb.child('Users/$uid/materials/${materials.name}').set('${materials.quanity}');
-
- 
- 
-}
-
-Future<void> deleteMaterial(BuildContext context, String name) async {
-  final db = await database;
-  db.delete("materials", where: "name = ?", whereArgs: [name]);
-  mapM = await db.query('materials');
-  //Navigator.push(
-  //  context, MaterialPageRoute(builder: (context) => MaterialListScreen()));
-}
-
-Future<void> addStock(BuildContext context, double currentQuanity, String name,
-    double amountToAdd) async {
-  //final db = await database;
-  double newStock;
-
-  late double materialKG;
-  newStock = currentQuanity + amountToAdd;
-  await db.rawUpdate(
-      'UPDATE materials SET quanity = $newStock WHERE name = "$name" ');
-  mapM = await db.query('materials'); //update values
-  //the following is only because setState is not working properly on other screen
-
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    content: Text("Added $amountToAdd KG to $name"),
   ));
 }

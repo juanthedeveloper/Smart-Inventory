@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:smart_inventory/databasedetails.dart';
-import 'package:smart_inventory/screens/materiallistscreen.dart';
+import 'package:smart_inventory/Items.dart';
+
 
 import '../main.dart';
+import 'materiallistscreen.dart';
 
 Future<double> _displayChangedouble(
     BuildContext context, String updateField) async {

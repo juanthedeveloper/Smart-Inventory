@@ -97,6 +97,7 @@ class _EmailLogInState extends State<EmailLogIn> {
         MaterialPageRoute(builder: (context) => Home(uid: result.user!.uid)),
       );
     }).catchError((err) {
+      
       print(err.message);
       showDialog(
           context: context,
@@ -108,6 +109,10 @@ class _EmailLogInState extends State<EmailLogIn> {
                 ElevatedButton(
                   child: Text("Ok"),
                   onPressed: () {
+                    setState(() {
+                      isLoading = false;
+                    });
+                    
                     Navigator.of(context).pop();
                   },
                 )

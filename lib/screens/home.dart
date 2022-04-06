@@ -1,10 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_inventory/screens/productsscreen.dart';
-import 'package:smart_inventory/screens/signup.dart';
 
-import '../main.dart';
+import 'productsscreen.dart';
+import 'signup.dart';
 import 'materiallistscreen.dart';
 
 class Home extends StatefulWidget {
@@ -25,18 +24,13 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    updateValue(widget.uid);
-   
   }
 
-  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        //the entire screen becomes this widget with custom settings
-
         body: Container(
           constraints: BoxConstraints.expand(),
           decoration: const BoxDecoration(
@@ -52,8 +46,6 @@ class _HomeState extends State<Home> {
                   style: ElevatedButton.styleFrom(primary: Colors.grey[600]),
                   child: Text("Products"),
                   onPressed: () async {
-                    mapI = await db.query('items');
-                    addMaptoList(); //update count
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -68,9 +60,7 @@ class _HomeState extends State<Home> {
                   child: Text(
                     "Materials",
                   ),
-                  onPressed: () async {
-                    updateValue(widget.uid);
-
+                  onPressed: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(

@@ -14,8 +14,8 @@ class SignUp extends StatelessWidget {
         ),
         body: Center(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <
-              Widget>[
-            Padding(
+              Widget>[Image.asset('assets/images/main.png', fit: BoxFit.scaleDown),
+            const Padding(
               padding: EdgeInsets.all(10.0),
               child: Text("Smart Inventory",
                   style: TextStyle(

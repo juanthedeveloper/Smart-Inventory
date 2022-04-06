@@ -71,25 +71,6 @@ class _EmailSignUpState extends State<EmailSignUp> {
               Padding(
                 padding: EdgeInsets.all(20.0),
                 child: TextFormField(
-                  controller: ageController,
-                  decoration: InputDecoration(
-                    labelText: "Enter Age",
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                  // The validator receives the text that the user has entered.
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Enter Age';
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(20.0),
-                child: TextFormField(
                   obscureText: true,
                   controller: passwordController,
                   decoration: InputDecoration(
@@ -114,7 +95,9 @@ class _EmailSignUpState extends State<EmailSignUp> {
                 child: isLoading
                     ? CircularProgressIndicator()
                     : ElevatedButton(
-                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.lightBlue)),
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Colors.lightBlue)),
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             setState(() {
@@ -136,7 +119,6 @@ class _EmailSignUpState extends State<EmailSignUp> {
         .then((result) {
       dbRef.child(result.user!.uid).set({
         "email": emailController.text,
-        "age": ageController.text,
         "name": nameController.text
       }).then((res) {
         isLoading = false;

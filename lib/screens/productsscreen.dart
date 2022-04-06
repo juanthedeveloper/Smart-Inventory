@@ -1,4 +1,4 @@
-import 'package:smart_inventory/databasedetails.dart';
+import 'package:smart_inventory/Items.dart';
 import 'package:smart_inventory/screens/itemformscreen.dart';
 import 'package:smart_inventory/main.dart';
 import 'package:flutter/material.dart';
