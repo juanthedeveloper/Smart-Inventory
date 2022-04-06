@@ -1,26 +1,12 @@
 import 'dart:async';
-
+import 'package:progress_indicators/progress_indicators.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:smart_inventory/databasedetails.dart';
+
+import 'package:smart_inventory/Materials.dart';
 import 'package:smart_inventory/main.dart';
 import 'package:flutter/material.dart';
 
-//displays all the materials and quanity
 //TODO remove all positioned widgets with rows and columns
-//late String? uid;
-late Map<dynamic, dynamic> map = {};
-late List<String> materialList = [];
-late String material;
-late List<String> keysList = [];
-
-//adds the mapM list from db and adds it to a local materialist to display dropdown menu options
-addMaptoList() async {
-  materialList
-      .clear(); //needed so that the list isent being added infinite items every update/call
-  for (int index = 0; index < mapM.length; index++) {
-    materialList.add(mapM[index]['name']);
-  }
-}
 
 //this brings up an alert dialog to input material
 Future<void> _displayMaterialInput(BuildContext context, var uid) async {
@@ -67,7 +53,7 @@ Future<void> _displayMaterialInput(BuildContext context, var uid) async {
               await insertMaterial(newMaterial, uid);
               mapM = await db.query('materials');
               //add to map for drop down menu purposes
-              addMaptoList(); //update the materialList values
+              // addMaptoList(); //update the materialList values
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -134,20 +120,20 @@ Future<double> displayAmountToAdd(
 
 //to delete a material
 Future<void> displayDeleteDialog(
-    BuildContext context, String deleteName) async {
+    BuildContext context, var uid, var material) async {
   return await showDialog(
     context: context,
     builder: (context) {
       return AlertDialog(
-        title: Text('Are you sure you would like to remove $deleteName?'),
+        title: Text('Are you sure you would like to remove $material?'),
         actions: <Widget>[
           TextButton(
             child: Text('OK'),
             onPressed: () async {
-              await deleteMaterial(context, deleteName);
-              addMaptoList();
+              deleteMaterial(uid, material);
+
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(deleteName + " removed."),
+                content: Text(material + " removed."),
               ));
               Navigator.pop(context);
             },
@@ -175,118 +161,151 @@ class MaterialListScreen extends StatefulWidget {
 }
 
 class MaterialListScreenState extends State<MaterialListScreen> {
-  //late Stream<Map<String, dynamic>> stream;
+  late Stream<Map<dynamic, dynamic>> stream;
   late DatabaseReference materials;
 
   @override
   void initState() {
-    //print(widget.uid);
     super.initState();
-    materials = FirebaseDatabase.instance.ref('Users/${widget.uid}/materials');
-    materials.onValue.listen((DatabaseEvent event) {
-      map = event.snapshot.value as Map;
-    });
-   
+
+    stream = FirebaseDatabase.instance
+        .ref('Users/${widget.uid}/materials')
+        .onValue
+        .map((event) => event.snapshot.value as Map<dynamic, dynamic>);
   }
 
   @override
   Widget build(BuildContext context) {
-    
-    return Scaffold(
-      backgroundColor: Colors.grey[400],
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.grey[600],
-        centerTitle: true,
-        title: Text("Material List"),
-      ),
-      body: ListView(children: [
-        for (int index = 0; index < map.length; index++)
-          Stack(children: [
-            Card(
-              color: getColor(map.keys
-                 .elementAt(index)
-                 .toString()
-                 .toUpperCase()), //gets the background color based in string data
-              child: Column(
-                children: [
-                  ListTile(
-                    title: Text(map.keys.elementAt(index).toString()),
-                    leading: Image.asset("assets/icons/filamentRoll.png"),
-                    subtitle: Text(
-                      "KG: " + map.values.elementAt(index).toString(),
-                      style: TextStyle(fontSize: 17, color: Colors.black),
+    return StreamBuilder<Map<dynamic, dynamic>>(
+        stream: stream,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return JumpingDotsProgressIndicator();
+          } else if (snapshot.connectionState == ConnectionState.done ||
+              snapshot.connectionState == ConnectionState.active) {
+            if (snapshot.hasError) {
+              return Text(snapshot.error.toString());
+            } else {
+              //IF EVERYTHING WORKS IT WOULD BE THIS CASE
+              return Scaffold(
+                backgroundColor: Colors.grey[400],
+                appBar: AppBar(
+                  automaticallyImplyLeading: false,
+                  backgroundColor: Colors.grey[600],
+                  centerTitle: true,
+                  title: Text("Material List"),
+                ),
+                body: ListView(children: [
+                  for (int index = 0; index < snapshot.data!.length; index++)
+                    Stack(children: [
+                      Card(
+                        color: getColor(snapshot.data!.keys
+                            .elementAt(index)
+                            .toString()
+                            .toUpperCase()), //gets the background color based in string data
+                        child: Column(
+                          children: [
+                            ListTile(
+                              title: Text(snapshot.data!.keys
+                                  .elementAt(index)
+                                  .toString()),
+                              leading:
+                                  Image.asset("assets/icons/filamentRoll.png"),
+                              subtitle: Text(
+                                "KG: " +
+                                    snapshot.data!.values
+                                        .elementAt(index)
+                                        .toString(),
+                                style: TextStyle(
+                                    fontSize: 17, color: Colors.black),
+                              ),
+                            ),
+                            Row(
+                              //Add and delete buttons
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                SizedBox(
+                                  height: 30,
+                                  child: TextButton(
+                                    child: Text(
+                                      "Add",
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                    onPressed: () async {
+                                      //wait for amount to be return
+                                      final double amount =
+                                          await displayAmountToAdd(
+                                              context, index);
+                                      if (amount > 0) {
+                                        addStock(
+                                            currentQuanity: snapshot
+                                                .data!.values
+                                                .elementAt(index),
+                                            material: snapshot.data!.keys
+                                                .elementAt(index)
+                                                .toString(),
+                                            amountToAdd: amount,
+                                            uid: widget.uid);
+
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text(
+                                              "Added $amount to ${snapshot.data!.keys.elementAt(index).toString()}"),
+                                        ));
+
+                                        setState(() {});
+                                      }
+                                    },
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 30,
+                                  child: TextButton(
+                                    child: const Text(
+                                      "Delete",
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                    onPressed: () async {
+                                      displayDeleteDialog(
+                                          context,
+                                          widget.uid,
+                                          snapshot.data!.keys
+                                              .elementAt(index)
+                                              .toString());
+                                      setState(() {});
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      )
+                    ])
+                ]),
+                floatingActionButton: FloatingActionButton(
+                  //bottom right button to add materials
+                  onPressed: () {},
+                  child: Ink(
+                    decoration: ShapeDecoration(
+                        color: Colors.grey[400], shape: CircleBorder()),
+                    child: IconButton(
+                      iconSize: 60,
+                      onPressed: () async {
+                        //enter material
+                        await _displayMaterialInput(context, widget.uid);
+                        setState(() {});
+                      },
+                      icon: Image.asset('assets/icons/filamentPlusIco.png'),
                     ),
                   ),
-                  Row(
-                    //Add and delete buttons
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      SizedBox(
-                        height: 30,
-                        child: TextButton(
-                          child: Text(
-                            "Add",
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          onPressed: () async {
-                            //wait for amount to be return
-                            final double amount =
-                                await displayAmountToAdd(context, index);
-                            if (amount != 0) {
-                              //THEN run this and wait for db updates
-                              FirebaseDatabase.instance
-                                  .ref('Users/${widget.uid}/materials/')
-                                  .update({
-                                map.keys.elementAt(index):
-                                    map.values.elementAt(index) + amount
-                              });
-                              setState(() {});
-                            } //refresh UI
-                          },
-                        ),
-                      ),
-                      SizedBox(
-                        height: 30,
-                        child: TextButton(
-                          child: Text(
-                            "Delete",
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          onPressed: () async {
-                            FirebaseDatabase.instance
-                                .ref(
-                                    'Users/${widget.uid}/materials/${map.keys.elementAt(index).toString()}')
-                                .remove();
-                            setState(() {});
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            )
-          ])
-      ]),
-      floatingActionButton: FloatingActionButton(
-        //bottom right button to add materials
-        onPressed: () {},
-        child: Ink(
-          decoration:
-              ShapeDecoration(color: Colors.grey[400], shape: CircleBorder()),
-          child: IconButton(
-            iconSize: 60,
-            onPressed: () async {
-              //enter material
-              await _displayMaterialInput(context, widget.uid);
-              setState(() {});
-            },
-            icon: Image.asset('assets/icons/filamentPlusIco.png'),
-          ),
-        ),
-      ),
-    );
+                ),
+              );
+            }
+          } else {
+            return Text("idfk");
+          }
+        });
   }
 }
 
@@ -339,14 +358,4 @@ getColor(String colorName) {
   if (colorName.contains("INDIGO")) {
     return Colors.indigo;
   }
-}
-
-Future<void> updateValue(var uid) async {
-  DatabaseReference materials =
-      FirebaseDatabase.instance.ref('Users/$uid/materials');
-
-  materials.onValue.listen((DatabaseEvent event) {
-    map = event.snapshot.value as Map;
-    
-  });
 }
