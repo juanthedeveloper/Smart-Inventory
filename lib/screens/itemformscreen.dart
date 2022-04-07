@@ -76,8 +76,8 @@ class ItemFormState extends State<ItemForm> {
       backgroundColor: Colors.grey[400],
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
-          : Stack(
-              children: [
+          : Stack());
+             /* children: [
                 Positioned(
                     top: 80,
                     width: 400,
@@ -287,5 +287,6 @@ class ItemFormState extends State<ItemForm> {
               ],
             ),
     );
-  }
+  }*/
+}
 }

@@ -3,7 +3,6 @@ import 'package:progress_indicators/progress_indicators.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 import 'package:smart_inventory/Materials.dart';
-import 'package:smart_inventory/main.dart';
 import 'package:flutter/material.dart';
 
 //TODO remove all positioned widgets with rows and columns
@@ -51,7 +50,7 @@ Future<void> _displayMaterialInput(BuildContext context, var uid) async {
                   name: material.toUpperCase().trimRight(),
                   quanity: materialKG);
               await insertMaterial(newMaterial, uid);
-              mapM = await db.query('materials');
+              //mapM = await db.query('materials');
               //add to map for drop down menu purposes
               // addMaptoList(); //update the materialList values
               Navigator.pop(context);
@@ -167,11 +166,10 @@ class MaterialListScreenState extends State<MaterialListScreen> {
   @override
   void initState() {
     super.initState();
-
     stream = FirebaseDatabase.instance
         .ref('Users/${widget.uid}/materials')
         .onValue
-        .map((event) => event.snapshot.value as Map<dynamic, dynamic>);
+        .map((event) => event.snapshot.value as Map<dynamic, dynamic>? ?? {});
   }
 
   @override

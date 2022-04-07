@@ -1,10 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import 'productsscreen.dart';
 import 'signup.dart';
 import 'materiallistscreen.dart';
+
+Future<String> getPhotoUrl()async{
+  String url;
+ url= await FirebaseStorage.instance.ref().child("carPhotos").getDownloadURL();
+  return url as String;
+}
 
 class Home extends StatefulWidget {
   final String? uid;
@@ -18,12 +25,19 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  late Reference carPhotoRef;
+  late String url;
   _HomeState();
   DatabaseReference dbRef = FirebaseDatabase.instance.ref().child("Users");
 
   @override
   void initState() {
     super.initState();
+    url = getPhotoUrl().then((value) => {
+      url =value 
+    }) as String;
+   
+    
   }
 
   @override
@@ -33,9 +47,9 @@ class _HomeState extends State<Home> {
       home: Scaffold(
         body: Container(
           constraints: BoxConstraints.expand(),
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage('assets/images/main.png'), fit: BoxFit.cover),
+          decoration:  BoxDecoration(
+            image: DecorationImage(//'assets/images/main.png'
+                image: NetworkImage(url), fit: BoxFit.cover),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

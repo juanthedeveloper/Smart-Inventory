@@ -51,7 +51,7 @@ class Items {
 }
 
 Future<void> insertItem(Items item) async {
-  final url =
+  /*final url =
       Uri.https('flutterapitest-default-rtdb.firebaseio.com', '/products.json');
   return http
       .post(url,
@@ -75,6 +75,7 @@ Future<void> insertItem(Items item) async {
     print(error);
     throw error;
   });
+  */
 }
 
 Future<void> deleteItem(BuildContext context, String name, String id) async {
@@ -84,8 +85,8 @@ Future<void> deleteItem(BuildContext context, String name, String id) async {
   http.delete(baseUrl);
 
  
-  db.delete("items", where: "name = ?", whereArgs: [name]);
-  mapI = await db.query('items');
+  //db.delete("items", where: "name = ?", whereArgs: [name]);
+ // mapI = await db.query('items');
   //Navigator.push(
   //  context, MaterialPageRoute(builder: (context) => InventoryScreen()));
 }
@@ -93,10 +94,12 @@ Future<void> deleteItem(BuildContext context, String name, String id) async {
 Future<void> updateItemDouble(BuildContext context, String name,
     String valueToChange, double updateAmount) async {
  
-  await db.rawUpdate(
+ /* await db.rawUpdate(
       'UPDATE items SET $valueToChange = $updateAmount WHERE name = "$name" ');
   mapI = await db.query('items');
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text("Changed $valueToChange to $updateAmount"),
   ));
+  
+  */
 }
