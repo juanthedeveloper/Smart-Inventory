@@ -51,6 +51,7 @@ class Items {
 }
 
 Future<void> insertItem(Items item) async {
+  /*
   final url =
       Uri.https('flutterapitest-default-rtdb.firebaseio.com', '/products.json');
   return http
@@ -75,9 +76,11 @@ Future<void> insertItem(Items item) async {
     print(error);
     throw error;
   });
+  */
 }
 
 Future<void> deleteItem(BuildContext context, String name, String id) async {
+ /*
   final baseUrl = Uri.https('', id);
 
   print(id);
@@ -99,4 +102,5 @@ Future<void> updateItemDouble(BuildContext context, String name,
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text("Changed $valueToChange to $updateAmount"),
   ));
+  */
 }
