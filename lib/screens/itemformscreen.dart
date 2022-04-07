@@ -72,7 +72,8 @@ class ItemFormState extends State<ItemForm> {
     );
     const enterMatHint = Text("Select material");
 
-    return Scaffold(
+    return Scaffold();
+    /*
       backgroundColor: Colors.grey[400],
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
@@ -287,5 +288,7 @@ class ItemFormState extends State<ItemForm> {
               ],
             ),
     );
+  }
+  */
   }
 }
