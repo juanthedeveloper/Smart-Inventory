@@ -84,8 +84,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   final double newValue =
                       await _displayChangedouble(context, 'price');
                   if (newValue != 0) {
-                    await updateItemDouble(
-                        context, mapI[widget.i]['name'], 'price', newValue);
+                //    await updateItemDouble(
+                  //      context, mapI[widget.i]['name'], 'price', newValue);
                     setState(() {});
                   }
                 },
