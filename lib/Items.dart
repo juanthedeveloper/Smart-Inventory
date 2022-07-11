@@ -1,11 +1,18 @@
 
 import 'dart:convert';
+
+import 'package:flutter/material.dart';
+
+import 'Materials.dart';
+
+
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import 'package:smart_inventory/main.dart';
 import 'package:flutter/material.dart';
 
-import 'package:sqflite/sqflite.dart';
+
 
 class Items {
   String name = "";
@@ -51,7 +58,7 @@ class Items {
 }
 
 Future<void> insertItem(Items item) async {
-  /*
+  
   final url =
       Uri.https('flutterapitest-default-rtdb.firebaseio.com', '/products.json');
   return http
@@ -69,30 +76,28 @@ Future<void> insertItem(Items item) async {
       .then((response) async {
     item.id = json.decode(response.body)['name'];
     //after loading to server is complete, add to local DB
-    final db = await database;
-    await db.insert('items', item.toMapI(),
-        conflictAlgorithm: ConflictAlgorithm.replace);
+   
   }).catchError((error) {
     print(error);
     throw error;
   });
-  */
+  
 }
 
 Future<void> deleteItem(BuildContext context, String name, String id) async {
- /*
+ 
   final baseUrl = Uri.https('', id);
 
   print(id);
   http.delete(baseUrl);
 
  
-  db.delete("items", where: "name = ?", whereArgs: [name]);
-  mapI = await db.query('items');
+  //db.delete("items", where: "name = ?", whereArgs: [name]);
+ // mapI = await db.query('items');
   //Navigator.push(
   //  context, MaterialPageRoute(builder: (context) => InventoryScreen()));
 }
-
+/*
 Future<void> updateItemDouble(BuildContext context, String name,
     String valueToChange, double updateAmount) async {
  
@@ -102,5 +107,6 @@ Future<void> updateItemDouble(BuildContext context, String name,
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text("Changed $valueToChange to $updateAmount"),
   ));
-  */
+  
 }
+*/

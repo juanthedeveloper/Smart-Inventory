@@ -1,9 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:smart_inventory/Items.dart';
 import 'package:smart_inventory/screens/productsscreen.dart';
-import 'package:flutter/material.dart';
 
-import '../main.dart';
-import 'materiallistscreen.dart';
 
 var _isLoading = false;
 
@@ -17,8 +15,8 @@ displaySuccessDialog(BuildContext context) {
             TextButton(
               child: Text('OK'),
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => InventoryScreen()));
+               // Navigator.push(context,
+               //     MaterialPageRoute(builder: (context) => InventoryScreen()));
               },
             ),
           ],
@@ -72,8 +70,8 @@ class ItemFormState extends State<ItemForm> {
     );
     const enterMatHint = Text("Select material");
 
-    return Scaffold();
-    /*
+    return Scaffold(
+    
       backgroundColor: Colors.grey[400],
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
@@ -269,8 +267,8 @@ class ItemFormState extends State<ItemForm> {
                                   title: Text("Error in url?"),
                                 ));
                       }).then((_) async {
-                        mapI = await db.query('items'); //query new db item
-                        await addMaptoList(); //update count
+                      //  mapI = await db.query('items'); //query new db item
+                      //  await addMaptoList(); //update count
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(newItem.name + " added"),
                         ));
@@ -289,6 +287,6 @@ class ItemFormState extends State<ItemForm> {
             ),
     );
   }
-  */
+  
   }
-}
+

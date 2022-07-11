@@ -61,15 +61,26 @@ Future<void> _displayMaterialInput(BuildContext context, var uid) async {
               );
             },
           ),
-          TextButton(
-              child: Text("Cancel"),
-              onPressed: () {
-                Navigator.pop(context);
-              })
+          const cancelTextButton()
         ],
       );
     },
   );
+}
+
+class cancelTextButton extends StatelessWidget {
+  const cancelTextButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+        child: Text("Cancel"),
+        onPressed: () {
+          Navigator.pop(context);
+        });
+  }
 }
 
 //this brings up an dialog to take an input to add quanity to stock

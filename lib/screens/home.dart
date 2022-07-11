@@ -49,7 +49,7 @@ class _HomeState extends State<Home> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => InventoryScreen()));
+                            builder: (context) => InventoryScreen(uid: widget.uid)));
                   },
                 ),
               ),
